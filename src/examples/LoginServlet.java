@@ -38,7 +38,8 @@ public class LoginServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
         
-        String userText = request.getParameter("testText");
+        String userText = request.getParameter("username");
+        String password = request.getParameter("password");
 
         
         // gets session and sets and attribute with a key-value pair
@@ -62,81 +63,82 @@ public class LoginServlet extends HttpServlet {
         Statement stmt = null;
         ResultSet rs = null;
 
-        ArrayList<Object> testDBOutput = new ArrayList<Object>();
+        // ArrayList<Object> testDBOutput = new ArrayList<Object>();
 
 
-        try {
-            ctx = new InitialContext();
-            DataSource ds = (DataSource) ctx.lookup("java:comp/env/jdbc/firstDB");
+        // try {
+        //     ctx = new InitialContext();
+        //     DataSource ds = (DataSource) ctx.lookup("java:comp/env/jdbc/firstDB");
 
-            con = ds.getConnection();
+        //     con = ds.getConnection();
 
-            stmt = con.createStatement();
+        //     stmt = con.createStatement();
 
-            // String un = result[0];
+        //     // String un = result[0];
 
-            // String pw = result[1];
+        //     // String pw = result[1];
 
-            /**
-             * Prepared Satament Example below
-             */
+        //     /**
+        //      * Prepared Satament Example below
+        //      */
 
-            // String secret_query = "insert into users (userid, passwd_digest) values (?,?)";
+        //     // String secret_query = "insert into users (userid, passwd_digest) values (?,?)";
 
-            // PreparedStatement preparedStatement = con.prepareStatement(secret_query);
-            // preparedStatement.setString(1, un);
-            // preparedStatement.setString(2, pw);
+        //     // PreparedStatement preparedStatement = con.prepareStatement(secret_query);
+        //     // preparedStatement.setString(1, un);
+        //     // preparedStatement.setString(2, pw);
 
-            // preparedStatement.executeUpdate();
-            // preparedStatement.close();
+        //     // preparedStatement.executeUpdate();
+        //     // preparedStatement.close();
 
-            // stmt.execute("insert into users (userid, passwd_digest) values ('" + result[0] + "', '" + result[1] + "')");
+        //     // stmt.execute("insert into users (userid, passwd_digest) values ('" + result[0] + "', '" + result[1] + "')");
             
-            rs = stmt.executeQuery("select * from users");
-            // st.close();
-            // stmt = con.createStatement();
+        //     rs = stmt.executeQuery("select * from users");
+        //     // st.close();
+        //     // stmt = con.createStatement();
     
-            // rs = stmt.executeQuery("SELECT * FROM USERS");
+        //     // rs = stmt.executeQuery("SELECT * FROM USERS");
 
-            while(rs.next()) {
-                testDBOutput.add(rs.getString("userid"));
-                testDBOutput.add(rs.getString("passwd_digest"));
-            }
+        //     while(rs.next()) {
+        //         testDBOutput.add(rs.getString("userid"));
+        //         testDBOutput.add(rs.getString("passwd_digest"));
+        //     }
 
-            //try to print DB info
+        //     //try to print DB info
 
-            String productInfo = con.getMetaData().getDatabaseProductName();
+        //     String productInfo = con.getMetaData().getDatabaseProductName();
 
-            session.setAttribute("DBProductInfo", productInfo);
+        //     session.setAttribute("DBProductInfo", productInfo);
 
             
-        } catch (NamingException ex) {
+        // } catch (NamingException ex) {
 
-            ex.printStackTrace();
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-        } finally {
-            try {
-                rs.close();
-                stmt.close();
-                con.close();
-                ctx.close();
+        //     ex.printStackTrace();
+        // } catch (SQLException ex) {
+        //     ex.printStackTrace();
+        // } finally {
+        //     try {
+        //         rs.close();
+        //         stmt.close();
+        //         con.close();
+        //         ctx.close();
 
 
     
-            }catch (SQLException error) {
-                error.printStackTrace();
-            }catch (NamingException error) {
-                error.printStackTrace();
-            }
-        }
+        //     }catch (SQLException error) {
+        //         error.printStackTrace();
+        //     }catch (NamingException error) {
+        //         error.printStackTrace();
+        //     }
+        // }
 
 
 
+        session.setAttribute("name", userText);
+        session.setAttribute("pw", password);
 
+        //session.setAttribute("testDB", testDBOutput);
 
-        session.setAttribute("testDB", testDBOutput);
-
-        response.sendRedirect ("hello.jsp");
+        response.sendRedirect ("home.jsp");
     }
 }

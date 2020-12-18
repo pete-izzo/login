@@ -16,7 +16,7 @@
   
     <body bgcolor=white>
   
-    <h1>Welcome <c:out val="${name}" /></h1>
+    <h1>Welcome <c:out value="${name}" /></h1>
 
 
     </body>
