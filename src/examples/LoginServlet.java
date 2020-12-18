@@ -99,7 +99,10 @@ public class LoginServlet extends HttpServlet {
                 response.sendRedirect ("home.jsp");
 
             } else{
-                out.println("poop");
+                response.sendRedirect ("login.jsp");
+                String invalid = "Please enter a valid username or password";
+                session.setAttribute("invalid", invalid);
+
             }
 
 

@@ -18,7 +18,7 @@
   
     <h1>Welcome <c:out value="${name}" /></h1>
 
-    <h2><c:out value="${DBProductInfo}" /></h2>
+    <h2>Brought to you by: <c:out value="${DBProductInfo}" /></h2>
 
 
     </body>
