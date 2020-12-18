@@ -27,7 +27,7 @@
 
     <!--PLACE MESSAGE HERE IF LOGIN INFO IS INCORRECT-->
     </form>
-
+        <h3><c:out value="${invalid}"/></h3>
 
     </body>
 </html>

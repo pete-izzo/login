@@ -18,6 +18,8 @@
   
     <h1>Welcome <c:out value="${name}" /></h1>
 
+    <h2><c:out value="${DBProductInfo}" /></h2>
+
 
     </body>
 </html>

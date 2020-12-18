@@ -17,9 +17,6 @@
         <servlet-class>examples.Hello</servlet-class>
     </servlet> -->
 
-    
-
-
     <servlet>
         <servlet-name>LoginServlet</servlet-name>
         <servlet-class>examples.LoginServlet</servlet-class>

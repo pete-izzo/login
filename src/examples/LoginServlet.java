@@ -41,6 +41,8 @@ public class LoginServlet extends HttpServlet {
         String userText = request.getParameter("username");
         String password = request.getParameter("password");
 
+        PrintWriter out = response.getWriter();
+
         
         // gets session and sets and attribute with a key-value pair
         //key is "userText" value is "randText"
@@ -65,80 +67,98 @@ public class LoginServlet extends HttpServlet {
 
         // ArrayList<Object> testDBOutput = new ArrayList<Object>();
 
-
-        // try {
-        //     ctx = new InitialContext();
-        //     DataSource ds = (DataSource) ctx.lookup("java:comp/env/jdbc/firstDB");
-
-        //     con = ds.getConnection();
-
-        //     stmt = con.createStatement();
-
-        //     // String un = result[0];
-
-        //     // String pw = result[1];
-
-        //     /**
-        //      * Prepared Satament Example below
-        //      */
-
-        //     // String secret_query = "insert into users (userid, passwd_digest) values (?,?)";
-
-        //     // PreparedStatement preparedStatement = con.prepareStatement(secret_query);
-        //     // preparedStatement.setString(1, un);
-        //     // preparedStatement.setString(2, pw);
-
-        //     // preparedStatement.executeUpdate();
-        //     // preparedStatement.close();
-
-        //     // stmt.execute("insert into users (userid, passwd_digest) values ('" + result[0] + "', '" + result[1] + "')");
-            
-        //     rs = stmt.executeQuery("select * from users");
-        //     // st.close();
-        //     // stmt = con.createStatement();
-    
-        //     // rs = stmt.executeQuery("SELECT * FROM USERS");
-
-        //     while(rs.next()) {
-        //         testDBOutput.add(rs.getString("userid"));
-        //         testDBOutput.add(rs.getString("passwd_digest"));
-        //     }
-
-        //     //try to print DB info
-
-        //     String productInfo = con.getMetaData().getDatabaseProductName();
-
-        //     session.setAttribute("DBProductInfo", productInfo);
-
-            
-        // } catch (NamingException ex) {
-
-        //     ex.printStackTrace();
-        // } catch (SQLException ex) {
-        //     ex.printStackTrace();
-        // } finally {
-        //     try {
-        //         rs.close();
-        //         stmt.close();
-        //         con.close();
-        //         ctx.close();
-
-
-    
-        //     }catch (SQLException error) {
-        //         error.printStackTrace();
-        //     }catch (NamingException error) {
-        //         error.printStackTrace();
-        //     }
-        // }
-
-
-
         session.setAttribute("name", userText);
         session.setAttribute("pw", password);
 
+
+
+
+        try {
+            ctx = new InitialContext();
+            DataSource ds = (DataSource) ctx.lookup("java:comp/env/jdbc/firstDB");
+
+            con = ds.getConnection();
+
+            stmt = con.createStatement();
+
+            String query = "select * from users where userid = ? and passwd_digest = ?";
+
+            PreparedStatement preparedStatement = con.prepareStatement(query);
+            preparedStatement.setString(1, userText);
+            preparedStatement.setString(2, password);
+
+            rs = preparedStatement.executeQuery();
+
+            String productInfo = con.getMetaData().getDatabaseProductName();
+
+            session.setAttribute("DBProductInfo", productInfo);
+    
+            
+
+            if (rs.next()) {
+                response.sendRedirect ("home.jsp");
+
+            } else{
+                out.println("poop");
+            }
+
+
+        
+              
+
+            // String un = result[0];
+
+            // String pw = result[1];
+
+            /**
+             * Prepared Satament Example below
+             */
+
+
+            // preparedStatement.executeUpdate();
+            // preparedStatement.close();
+
+            // stmt.execute("insert into users (userid, passwd_digest) values ('" + result[0] + "', '" + result[1] + "')");
+            
+            // rs = stmt.executeQuery("select * from users");
+            // st.close();
+            // stmt = con.createStatement();
+    
+            // rs = stmt.executeQuery("SELECT * FROM USERS");
+
+
+            //try to print DB info
+
+
+            
+        } catch (NamingException ex) {
+    
+            ex.printStackTrace();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        } finally {
+            try {
+                rs.close();
+                stmt.close();
+                con.close();
+                ctx.close();
+
+
+
+    
+            }catch (SQLException error) {
+                error.printStackTrace();
+            }catch (NamingException error) {
+                error.printStackTrace();
+            }
+        }
+
+
+
+
+
+
         //session.setAttribute("testDB", testDBOutput);
 
-        response.sendRedirect ("home.jsp");
     }
 }
