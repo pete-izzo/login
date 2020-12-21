@@ -70,9 +70,8 @@ public class LoginServlet extends HttpServlet {
         session.setAttribute("name", userText);
         session.setAttribute("pw", password);
 
-        boolean isLoggedIn = false;
+        String isLoggedIn = "false";
 
-        session.setAttribute("logged", isLoggedIn);
 
 
 
@@ -101,7 +100,7 @@ public class LoginServlet extends HttpServlet {
 
             if (rs.next()) {
                 response.sendRedirect ("home.jsp");
-                isLoggedIn = true;
+                isLoggedIn = "true";
 
             } else{
                 response.sendRedirect ("login.jsp");
@@ -132,6 +131,9 @@ public class LoginServlet extends HttpServlet {
                 error.printStackTrace();
             }
         }
+
+        session.setAttribute("logged", isLoggedIn);
+
 
     }
 }

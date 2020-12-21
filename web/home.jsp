@@ -15,11 +15,13 @@
 
     <%
     String uname = (String) session.getAttribute("name");
-    if (null == uname) {
+    String isLogged = (String) session.getAttribute("logged");
+
+    if (null == uname || isLogged == "false") {
     session.setAttribute("errorMessage", "Login Failed ");
     response.sendRedirect("login.jsp");
     }
- %>
+    %>
       
       <body bgcolor=white>
     
