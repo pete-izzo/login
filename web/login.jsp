@@ -28,6 +28,7 @@
     <!--PLACE MESSAGE HERE IF LOGIN INFO IS INCORRECT-->
     </form>
         <h3 style="color:red"><em><c:out value="${invalid}"/></em></h3>
+        <h3 style="color:red"><em><c:out value="${errorMessage}"/></em></h3>
 
     </body>
 </html>

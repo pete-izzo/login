@@ -70,6 +70,10 @@ public class LoginServlet extends HttpServlet {
         session.setAttribute("name", userText);
         session.setAttribute("pw", password);
 
+        boolean isLoggedIn = false;
+
+        session.setAttribute("logged", isLoggedIn);
+
 
 
 
@@ -97,6 +101,7 @@ public class LoginServlet extends HttpServlet {
 
             if (rs.next()) {
                 response.sendRedirect ("home.jsp");
+                isLoggedIn = true;
 
             } else{
                 response.sendRedirect ("login.jsp");
@@ -104,34 +109,6 @@ public class LoginServlet extends HttpServlet {
                 session.setAttribute("invalid", invalid);
 
             }
-
-
-        
-              
-
-            // String un = result[0];
-
-            // String pw = result[1];
-
-            /**
-             * Prepared Satament Example below
-             */
-
-
-            // preparedStatement.executeUpdate();
-            // preparedStatement.close();
-
-            // stmt.execute("insert into users (userid, passwd_digest) values ('" + result[0] + "', '" + result[1] + "')");
-            
-            // rs = stmt.executeQuery("select * from users");
-            // st.close();
-            // stmt = con.createStatement();
-    
-            // rs = stmt.executeQuery("SELECT * FROM USERS");
-
-
-            //try to print DB info
-
 
             
         } catch (NamingException ex) {
@@ -155,13 +132,6 @@ public class LoginServlet extends HttpServlet {
                 error.printStackTrace();
             }
         }
-
-
-
-
-
-
-        //session.setAttribute("testDB", testDBOutput);
 
     }
 }

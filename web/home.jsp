@@ -8,19 +8,29 @@
 <%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql"%>
 
 
-
 <html>
     <head>
       <title>Welcome Home</title>
     </head>
+
+    <%
+    String uname = (String) session.getAttribute("name");
+    if (null == uname) {
+    session.setAttribute("errorMessage", "Login Failed ");
+    response.sendRedirect("login.jsp");
+    }
+ %>
+      
+      <body bgcolor=white>
+    
+        <h1>Welcome <c:out value="${name}" /></h1>
   
-    <body bgcolor=white>
+        <h2>Brought to you by: <c:out value="${DBProductInfo}" /></h2>
+      
   
-    <h1>Welcome <c:out value="${name}" /></h1>
-
-    <h2>Brought to you by: <c:out value="${DBProductInfo}" /></h2>
+      </body>
 
 
-    </body>
+
 </html>
   
