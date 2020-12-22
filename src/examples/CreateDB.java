@@ -14,7 +14,7 @@ public class CreateDB {
         Statement stmt = null;
         System.out.print("idk");
         try {
-            Class.forName("com.mysql.jdbc.Driver");
+            Class.forName(driver);
 
             conn = DriverManager.getConnection(DB_URL, USER, PASS);
 
@@ -56,8 +56,10 @@ public class CreateDB {
 
         }catch (SQLException exception) {
             System.err.println ("SQLException : " + exception.toString ());
+        }catch (ClassNotFoundException e) {
+            e.printStackTrace();
         } finally{
-            conn.close();
+            // conn.close();
         }
 
     } 
