@@ -9,6 +9,11 @@
 
 
 <html>
+  <style type="text/css">
+    table, th, td {
+      border: 1px solid black;
+    }
+  </style>
     <head>
       <title>Welcome Home</title>
     </head>
@@ -28,8 +33,24 @@
         <h1>Welcome <c:out value="${name}" /></h1>
   
         <h2>Brought to you by: <c:out value="${DBProductInfo}" /></h2>
-      
-  
+
+        <table>
+            <thead>
+              <tr>
+                <th colspan="4">Order Info</th>
+              </tr>
+            </thead>
+
+            <tbody>
+
+              <tr>
+                <th>Order ID</th>
+                <th>Customer Name</th>
+                <th>Order Date</th>
+                <th>Description</th>
+              </tr>
+            </tbody>
+        </table>  
       </body>
 
 

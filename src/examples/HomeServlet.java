@@ -36,34 +36,27 @@ import java.util.logging.Logger;
 public class HomeServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-        /**
-         * ///////////////////////////
-         *  TODO: DISPLAY DB ITEMS
-         *  FOR LOGGED IN USER
-         * ///////////////////////////
-         */
+       
         String userText = request.getParameter("username");
         String password = request.getParameter("password");
 
         PrintWriter out = response.getWriter();
 
-        
-        // gets session and sets and attribute with a key-value pair
-        //key is "userText" value is "randText"
         HttpSession session = request.getSession(false);
 
+        //Retrieve session variables
         String myUserName = (String)session.getAttribute("name");
 
         String isLoggedIn = (String)session.getAttribute("logged");
 
 
+       
+        
         /**
-         *  //////////////////////////////////////
-         *  Check UN & PW
-         *  //////////////////////////////////////
+         * /////////////
+         * DB INFO
+         * /////////////
          */
-        
-        
 
         String dbURL ="java:comp/env/jdbc/NewDBTest";
 
@@ -74,7 +67,63 @@ public class HomeServlet extends HttpServlet {
         Statement stmt = null;
         ResultSet rs = null;
 
-        // ArrayList<Object> testDBOutput = new ArrayList<Object>();
+         /**
+         * ///////////////////////////
+         *  TODO: DISPLAY DB ITEMS
+         *  FOR LOGGED IN USER
+         * ///////////////////////////
+         */
+
+        ArrayList<Object> testDBOutput = new ArrayList<Object>();
+
+
+        //Get data from
+        try {
+            ctx = new InitialContext();
+            DataSource ds = (DataSource) ctx.lookup("java:comp/env/jdbc/firstDB");
+
+            con = ds.getConnection();
+
+            stmt = con.createStatement();
+            
+            rs = stmt.executeQuery("select * from users");
+            // st.close();
+            // stmt = con.createStatement();
+    
+            // rs = stmt.executeQuery("SELECT * FROM USERS");
+
+            while(rs.next()) {
+                testDBOutput.add(rs.getString("userid"));
+                testDBOutput.add(rs.getString("passwd_digest"));
+            }
+
+            //try to print DB info
+
+            String productInfo = con.getMetaData().getDatabaseProductName();
+
+            session.setAttribute("DBProductInfo", productInfo);
+
+            
+        } catch (NamingException ex) {
+
+            ex.printStackTrace();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        } finally {
+            try {
+                rs.close();
+                stmt.close();
+                con.close();
+                ctx.close();
+
+
+    
+            }catch (SQLException error) {
+                error.printStackTrace();
+            }catch (NamingException error) {
+                error.printStackTrace();
+            }
+        }
 
 
         response.sendRedirect ("home.jsp");

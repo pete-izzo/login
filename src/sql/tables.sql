@@ -22,3 +22,7 @@ insert into orders(order_id, cust_id, order_date, order_desc) values (1, 1, CURR
 insert into users(userid, passwd_digest) values ('Testboy2', 'pass');
 insert into customers(cust_id, cust_name) values (2, 'Donny');
 insert into orders(order_id, cust_id, order_date, order_desc) values (2, 2, CURRENT_DATE, 'A wheel of cheese');
+
+insert into users(userid, passwd_digest) values ('Testboy3', 'pass');
+insert into customers(cust_id, cust_name) values (2, 'Ringo');
+insert into orders(order_id, cust_id, order_date, order_desc) values (3, 3, 12-12-1957, 'A drumset');
