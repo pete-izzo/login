@@ -99,7 +99,7 @@ public class LoginServlet extends HttpServlet {
             
 
             if (rs.next()) {
-                response.sendRedirect ("home.jsp");
+                response.sendRedirect ("/login/HomeServlet");
                 isLoggedIn = "true";
 
             } else{
