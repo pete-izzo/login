@@ -49,24 +49,20 @@
                 <th>Order Date</th>
                 <th>Description</th>
               </tr>
-              <tr>
-                <c:forEach items="${orderID}" var="id">
-                      <th>${id}</th>
+                <c:forEach begin="0" var="outer" end="${orderID.size()-1}" varStatus="loop1">
+                  <tr>
+
+                      <th>${orderID[loop1.index]}</th>
+                  
+                          <th>${custName[loop1.index]}</th>
+
+                          <th>${orderDate[loop1.index]}</th>
+
+                          <th>${description[loop1.index]}</th>
+                  </tr>
                 </c:forEach>
                 
 
-                <c:forEach items="${custName}" var="name">
-                      <th>${name}</th>
-                </c:forEach>
-
-                <c:forEach items="${orderDate}" var="date">
-                      <th>${date}</th>
-                </c:forEach>
-
-                <c:forEach items="${description}" var="desc">
-                      <th>${desc}</th>
-                </c:forEach>
-              </tr>
             </tbody>
         </table>  
       </body>
