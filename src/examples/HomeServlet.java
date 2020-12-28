@@ -66,6 +66,7 @@ public class HomeServlet extends HttpServlet {
         Connection con = null;
         Statement stmt = null;
         ResultSet rs = null;
+        ResultSet newrs = null;
 
          /**
          * ///////////////////////////
@@ -74,10 +75,16 @@ public class HomeServlet extends HttpServlet {
          * ///////////////////////////
          */
 
-        ArrayList<Object> testDBOutput = new ArrayList<Object>();
+        ArrayList<Object> orderID = new ArrayList<Object>();
+        ArrayList<Object> custName = new ArrayList<Object>();
+        ArrayList<Object> orderDate = new ArrayList<Object>();
+        ArrayList<Object> description = new ArrayList<Object>();
 
 
-        //Get data from
+
+
+
+        //Get data from derby
         try {
             ctx = new InitialContext();
             DataSource ds = (DataSource) ctx.lookup("java:comp/env/jdbc/firstDB");
@@ -86,15 +93,23 @@ public class HomeServlet extends HttpServlet {
 
             stmt = con.createStatement();
             
-            rs = stmt.executeQuery("select * from users");
+            rs = stmt.executeQuery("select * from orders");
             // st.close();
             // stmt = con.createStatement();
     
             // rs = stmt.executeQuery("SELECT * FROM USERS");
 
             while(rs.next()) {
-                testDBOutput.add(rs.getString("userid"));
-                testDBOutput.add(rs.getString("passwd_digest"));
+                orderID.add(rs.getInt("order_id"));
+                orderDate.add(rs.getDate("order_date"));
+                description.add(rs.getString("order_desc"));
+            }
+
+            newrs = stmt.executeQuery("select cust_name from customers");
+
+
+            while(newrs.next()) {
+                custName.add(newrs.getString("cust_name"));
             }
 
             //try to print DB info
@@ -112,6 +127,7 @@ public class HomeServlet extends HttpServlet {
         } finally {
             try {
                 rs.close();
+                newrs.close();
                 stmt.close();
                 con.close();
                 ctx.close();
@@ -125,71 +141,12 @@ public class HomeServlet extends HttpServlet {
             }
         }
 
+        session.setAttribute("orderID", orderID);
+        session.setAttribute("custName", custName);
+        session.setAttribute("orderDate", orderDate);
+        session.setAttribute("description", description);
 
         response.sendRedirect ("home.jsp");
-
-
-
-
-
-
-        // try {
-        //     ctx = new InitialContext();
-        //     DataSource ds = (DataSource) ctx.lookup("java:comp/env/jdbc/firstDB");
-
-        //     con = ds.getConnection();
-
-        //     stmt = con.createStatement();
-
-        //     String query = "select * from users where userid = ? and passwd_digest = ?";
-
-        //     PreparedStatement preparedStatement = con.prepareStatement(query);
-        //     preparedStatement.setString(1, userText);
-        //     preparedStatement.setString(2, password);
-
-        //     rs = preparedStatement.executeQuery();
-
-        //     String productInfo = con.getMetaData().getDatabaseProductName();
-
-        //     session.setAttribute("DBProductInfo", productInfo);
-    
-            
-
-        //     if (rs.next()) {
-        //         response.sendRedirect ("home.jsp");
-        //         isLoggedIn = "true";
-
-        //     } else{
-        //         response.sendRedirect ("login.jsp");
-        //         String invalid = "Please enter a valid username or password";
-        //         session.setAttribute("invalid", invalid);
-
-        //     }
-
-            
-        // } catch (NamingException ex) {
-    
-        //     ex.printStackTrace();
-        // } catch (SQLException ex) {
-        //     ex.printStackTrace();
-        // } finally {
-        //     try {
-        //         rs.close();
-        //         stmt.close();
-        //         con.close();
-        //         ctx.close();
-
-
-
-    
-        //     }catch (SQLException error) {
-        //         error.printStackTrace();
-        //     }catch (NamingException error) {
-        //         error.printStackTrace();
-        //     }
-        // }
-
-        // session.setAttribute("logged", isLoggedIn);
 
 
     }

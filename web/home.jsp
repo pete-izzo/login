@@ -49,6 +49,24 @@
                 <th>Order Date</th>
                 <th>Description</th>
               </tr>
+              <tr>
+                <c:forEach items="${orderID}" var="id">
+                      <th>${id}</th>
+                </c:forEach>
+                
+
+                <c:forEach items="${custName}" var="name">
+                      <th>${name}</th>
+                </c:forEach>
+
+                <c:forEach items="${orderDate}" var="date">
+                      <th>${date}</th>
+                </c:forEach>
+
+                <c:forEach items="${description}" var="desc">
+                      <th>${desc}</th>
+                </c:forEach>
+              </tr>
             </tbody>
         </table>  
       </body>
