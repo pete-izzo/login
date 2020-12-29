@@ -80,6 +80,8 @@ public class HomeServlet extends HttpServlet {
         ArrayList<Object> orderDate = new ArrayList<Object>();
         ArrayList<Object> description = new ArrayList<Object>();
 
+        ArrayList<Object> newOrders = new ArrayList<Object>();
+
 
 
 
@@ -93,9 +95,8 @@ public class HomeServlet extends HttpServlet {
 
             stmt = con.createStatement();
 
-            String sql = "SELECT cust_id, order_date, order_desc, cust_name FROM orders, customers" +
-                         " LEFT OUTER JOIN customers ON orders.cust_id=customers.cust_id" +
-                         " ORDER BY order_date, cust_name ASD";
+            String sql = "SELECT * FROM orders, customers" +
+                         " ORDER BY order_date ASD";
             
             rs = stmt.executeQuery(sql);
             // st.close();
@@ -104,10 +105,19 @@ public class HomeServlet extends HttpServlet {
             // rs = stmt.executeQuery("SELECT * FROM USERS");
 
             while(rs.next()) {
-                orderID.add(rs.getInt("order_id"));
-                orderDate.add(rs.getDate("order_date"));
-                description.add(rs.getString("order_desc"));
-                custName.add(rs.getString("cust_name"));
+                OrderInfo orders = new OrderInfo();
+
+                orders.setOrderID(rs.getInt("order_id"));
+                orders.setCustomerID(rs.getInt("cust_id"));
+                orders.setCustomerName(rs.getString("cust_name"));
+                orders.setOrderDate(rs.getDate("order_date"));
+                orders.setDescription(rs.getString("order_desc"));
+                newOrders.add(orders);
+
+                // orderID.add(rs.getInt("order_id"));
+                // orderDate.add(rs.getDate("order_date"));
+                // description.add(rs.getString("order_desc"));
+                // custName.add(rs.getString("cust_name"));
             }
 
             // newrs = stmt.executeQuery("select cust_name from customers");
@@ -146,6 +156,9 @@ public class HomeServlet extends HttpServlet {
             }
         }
 
+        session.setAttribute("cooldata", newOrders);
+
+
         session.setAttribute("orderID", orderID);
         session.setAttribute("custName", custName);
         session.setAttribute("orderDate", orderDate);
@@ -153,6 +166,14 @@ public class HomeServlet extends HttpServlet {
 
         response.sendRedirect ("home.jsp");
 
+
+
+        // Collections.sort(orderInfo, new Comparator<OrderInfo>() {
+        //     @Override
+        //     public int compare(Person p1, Person p2){
+        //         return p1.getIndex().compareTo(p2.getIndex());
+        //     }
+        // });
 
     }
 }

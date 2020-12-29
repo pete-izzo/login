@@ -52,13 +52,13 @@
                 <c:forEach begin="0" var="outer" end="${orderID.size()-1}" varStatus="loop1">
                   <tr>
 
-                      <th>${orderID[loop1.index]}</th>
+                      <th>${cooldata[loop1.index].getOrderID()}</th>
                   
-                          <th>${custName[loop1.index]}</th>
+                          <th>${cooldata[loop1.index].getCustomerName()}</th>
 
-                          <th>${orderDate[loop1.index]}</th>
+                          <th>${cooldata[loop1.index].getOrderDate()}</th>
 
-                          <th>${description[loop1.index]}</th>
+                          <th>${cooldata[loop1.index].getDescription()}</th>
                   </tr>
                 </c:forEach>
                 
