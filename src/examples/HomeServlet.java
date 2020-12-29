@@ -92,8 +92,11 @@ public class HomeServlet extends HttpServlet {
             con = ds.getConnection();
 
             stmt = con.createStatement();
+
+            String sql = "SELECT * FROM orders" +
+                         " ORDER BY order_date ASC";
             
-            rs = stmt.executeQuery("select * from orders");
+            rs = stmt.executeQuery(sql);
             // st.close();
             // stmt = con.createStatement();
     
