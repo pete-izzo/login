@@ -93,8 +93,9 @@ public class HomeServlet extends HttpServlet {
 
             stmt = con.createStatement();
 
-            String sql = "SELECT * FROM orders" +
-                         " ORDER BY order_date ASC";
+            String sql = "SELECT cust_id, order_date, order_desc, cust_name FROM orders, customers" +
+                         " LEFT OUTER JOIN customers ON orders.cust_id=customers.cust_id" +
+                         " ORDER BY order_date, cust_name ASD";
             
             rs = stmt.executeQuery(sql);
             // st.close();
@@ -106,14 +107,15 @@ public class HomeServlet extends HttpServlet {
                 orderID.add(rs.getInt("order_id"));
                 orderDate.add(rs.getDate("order_date"));
                 description.add(rs.getString("order_desc"));
+                custName.add(rs.getString("cust_name"));
             }
 
-            newrs = stmt.executeQuery("select cust_name from customers");
+            // newrs = stmt.executeQuery("select cust_name from customers");
 
 
-            while(newrs.next()) {
-                custName.add(newrs.getString("cust_name"));
-            }
+            // while(newrs.next()) {
+            //     custName.add(newrs.getString("cust_name"));
+            // }
 
             //try to print DB info
 
@@ -130,7 +132,7 @@ public class HomeServlet extends HttpServlet {
         } finally {
             try {
                 rs.close();
-                newrs.close();
+                // newrs.close();
                 stmt.close();
                 con.close();
                 ctx.close();
