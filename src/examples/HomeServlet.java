@@ -68,12 +68,7 @@ public class HomeServlet extends HttpServlet {
         ResultSet rs = null;
         ResultSet newrs = null;
 
-         /**
-         * ///////////////////////////
-         *  TODO: DISPLAY DB ITEMS
-         *  FOR LOGGED IN USER
-         * ///////////////////////////
-         */
+        
 
         ArrayList<Object> orderID = new ArrayList<Object>();
         ArrayList<Object> custName = new ArrayList<Object>();
@@ -95,7 +90,9 @@ public class HomeServlet extends HttpServlet {
 
             stmt = con.createStatement();
 
-            String sql = "SELECT * FROM orders, customers";
+            String sql = "SELECT orders.*, customers.*" +
+                         " FROM orders, customers" +
+                         " INNER JOIN orders ON customers.cust_id = orders.cust_id";
             
             rs = stmt.executeQuery(sql);
             // st.close();
@@ -106,27 +103,34 @@ public class HomeServlet extends HttpServlet {
             while(rs.next()) {
                 OrderInfo orders = new OrderInfo();
 
-                if(!newOrders.contains(rs.getInt("order_id"))) {
-                    orders.setOrderID(rs.getInt("order_id"));
-                } else{
-                    return;
-                }
-                if(!newOrders.contains(rs.getString("cust_name"))) {
-                    orders.setCustomerName(rs.getString("cust_name"));   
-                } else {
-                    return;
-                }
-                if(!newOrders.contains(rs.getDate("order_date"))) {
-                    orders.setOrderDate(rs.getDate("order_date"));   
-                } else {
-                    return;
-                }
-                if(!newOrders.contains(rs.getString("order_desc"))) {
-                    orders.setDescription(rs.getString("order_desc"));   
-                } else {
-                    return;
-                }
+                // if(!newOrders.contains(rs.getInt("order_id"))) {
+                //     orders.setOrderID(rs.getInt("order_id"));
+                // } 
+                // if(!newOrders.contains(rs.getString("cust_name"))) {
+                //     orders.setCustomerName(rs.getString("cust_name"));   
+                // } 
+                // if(!newOrders.contains(rs.getDate("order_date"))) {
+                //     orders.setOrderDate(rs.getDate("order_date"));   
+                // } 
+                // if(!newOrders.contains(rs.getString("order_desc"))) {
+                //     orders.setDescription(rs.getString("order_desc"));   
+                // } 
 
+                orders.setOrderID(rs.getInt("order_id"));
+
+                if (rs.getString("cust_name") == null) {
+                    orders.setCustomerName(" ");
+                    return;
+                } else {
+                    orders.setCustomerName(rs.getString("cust_name"));
+                }
+                
+                orders.setOrderDate(rs.getDate("order_date"));
+                orders.setDescription(rs.getString("order_desc"));   
+   
+
+                
+                
 
                 newOrders.add(orders);
 
