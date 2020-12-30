@@ -90,9 +90,10 @@ public class HomeServlet extends HttpServlet {
 
             stmt = con.createStatement();
 
-            String sql = "SELECT orders.*, customers.*" +
-                         " FROM orders, customers" +
-                         " INNER JOIN orders ON customers.cust_id = orders.cust_id";
+            String sql = "SELECT o.*, c.cust_name" +
+                         " FROM orders o, customers c" +
+                         " WHERE o.cust_id = c.cust_id" +
+                         " ORDER BY order_date ASD";
             
             rs = stmt.executeQuery(sql);
             // st.close();
@@ -117,10 +118,8 @@ public class HomeServlet extends HttpServlet {
                 // } 
 
                 orders.setOrderID(rs.getInt("order_id"));
-
                 if (rs.getString("cust_name") == null) {
                     orders.setCustomerName(" ");
-                    return;
                 } else {
                     orders.setCustomerName(rs.getString("cust_name"));
                 }
