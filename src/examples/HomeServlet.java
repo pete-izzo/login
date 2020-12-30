@@ -80,7 +80,7 @@ public class HomeServlet extends HttpServlet {
         ArrayList<Object> orderDate = new ArrayList<Object>();
         ArrayList<Object> description = new ArrayList<Object>();
 
-        ArrayList<Object> newOrders = new ArrayList<Object>();
+        ArrayList<OrderInfo> newOrders = new ArrayList<OrderInfo>();
 
 
 
@@ -95,8 +95,7 @@ public class HomeServlet extends HttpServlet {
 
             stmt = con.createStatement();
 
-            String sql = "SELECT * FROM orders, customers" +
-                         " ORDER BY order_date ASD";
+            String sql = "SELECT * FROM orders, customers";
             
             rs = stmt.executeQuery(sql);
             // st.close();
@@ -107,12 +106,30 @@ public class HomeServlet extends HttpServlet {
             while(rs.next()) {
                 OrderInfo orders = new OrderInfo();
 
-                orders.setOrderID(rs.getInt("order_id"));
-                orders.setCustomerID(rs.getInt("cust_id"));
-                orders.setCustomerName(rs.getString("cust_name"));
-                orders.setOrderDate(rs.getDate("order_date"));
-                orders.setDescription(rs.getString("order_desc"));
+                if(!newOrders.contains(rs.getInt("order_id"))) {
+                    orders.setOrderID(rs.getInt("order_id"));
+                } else{
+                    return;
+                }
+                if(!newOrders.contains(rs.getString("cust_name"))) {
+                    orders.setCustomerName(rs.getString("cust_name"));   
+                } else {
+                    return;
+                }
+                if(!newOrders.contains(rs.getDate("order_date"))) {
+                    orders.setOrderDate(rs.getDate("order_date"));   
+                } else {
+                    return;
+                }
+                if(!newOrders.contains(rs.getString("order_desc"))) {
+                    orders.setDescription(rs.getString("order_desc"));   
+                } else {
+                    return;
+                }
+
+
                 newOrders.add(orders);
+
 
                 // orderID.add(rs.getInt("order_id"));
                 // orderDate.add(rs.getDate("order_date"));
@@ -155,6 +172,13 @@ public class HomeServlet extends HttpServlet {
                 error.printStackTrace();
             }
         }
+
+        Collections.sort(newOrders, new Comparator<OrderInfo>() {
+            @Override
+            public int compare(OrderInfo o1, OrderInfo o2) {
+                return o1.getOrderDate().compareTo(o2.getOrderDate());
+            }
+        });
 
         session.setAttribute("cooldata", newOrders);
 

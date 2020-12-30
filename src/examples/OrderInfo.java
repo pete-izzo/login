@@ -17,7 +17,7 @@ import java.io.*;
 import java.util.*;
 import java.nio.charset.StandardCharsets;
 
-public class OrderInfo {
+public class OrderInfo{
     private int orderID;
     private int customerID;
     private String customerName = null;
@@ -67,8 +67,9 @@ public class OrderInfo {
         this.description = description;
     }
 
-    
-
-
+    // @Override
+    // public int compare(OrderInfo o1, OrderInfo o2) {
+    //     return o1.getOrderDate().compareTo(o2.getOrderDate());
+    // }
 
 }
