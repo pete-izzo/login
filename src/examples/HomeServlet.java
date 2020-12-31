@@ -167,4 +167,28 @@ public class HomeServlet extends HttpServlet {
         response.sendRedirect ("home.jsp");
 
     }
+
+    /**
+     * Post for form submission
+     * to edit query?
+     */
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+
+            HttpSession session = request.getSession(false);
+
+            String myUserName = (String)session.getAttribute("name");
+
+            String isLoggedIn = (String)session.getAttribute("logged");
+
+
+            /**
+             * db query needs to be updated with 
+             * new query and then saved to session so
+             * home.jsp can post it
+             */
+            session.setAttribute("newDBQuery", newDBQuery)
+    
+    }
 }

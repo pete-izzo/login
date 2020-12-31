@@ -15,7 +15,11 @@
     }
   </style>
     <head>
-      <title>Welcome Home</title>
+      <title>Welcome Home</title>  
+
+      <!--JQUERY NEEDED TO UPDATE PAGE DYNAMICALLY-->
+      <script src="http://code.jquery.com/jquery-latest.min.js"></script>
+
     </head>
 
     <%
@@ -34,12 +38,20 @@
   
         <h2>Brought to you by: <c:out value="${DBProductInfo}" /></h2>
 
-        <select name="something">
-          <option value="#">All Orders</option>
-          <c:forEach items="${cooldata}" var="items">
-            <option value="${item.customerName}">${items.customerName}</option>
-          </c:forEach>
-        </select>
+        <form action="HomeServlet" method="POST">
+
+          <select name="something">
+            <option value="#">All Orders</option>
+            <c:forEach items="${cooldata}" var="items">
+              <option value="${item.customerName}">${items.customerName}</option>
+            </c:forEach>
+          </select>
+
+          <input type="submit" value="Submit" />
+
+        </form>
+        
+        
 
         <table>
             <thead>
