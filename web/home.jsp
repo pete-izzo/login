@@ -34,6 +34,13 @@
   
         <h2>Brought to you by: <c:out value="${DBProductInfo}" /></h2>
 
+        <select name="something">
+          <option value="#">All Orders</option>
+          <c:forEach items="${cooldata}" var="items">
+            <option value="${item.customerName}">${items.customerName}</option>
+          </c:forEach>
+        </select>
+
         <table>
             <thead>
               <tr>
