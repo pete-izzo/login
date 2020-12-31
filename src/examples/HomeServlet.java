@@ -49,6 +49,8 @@ public class HomeServlet extends HttpServlet {
 
         String isLoggedIn = (String)session.getAttribute("logged");
 
+        System.out.println("first");
+
 
        
         
@@ -90,10 +92,17 @@ public class HomeServlet extends HttpServlet {
 
             stmt = con.createStatement();
 
+            //query the cust and order tables 
+            //not sure if necessary to order
+            // since it's ordered at the bottom already
+            System.out.println("Before query"); 
+
+
             String sql = "SELECT o.*, c.cust_name" +
                          " FROM orders o, customers c" +
-                         " WHERE o.cust_id = c.cust_id" +
-                         " ORDER BY order_date ASD";
+                         " WHERE o.cust_id = c.cust_id";
+
+            System.out.println("After query"); 
             
             rs = stmt.executeQuery(sql);
             // st.close();
@@ -102,6 +111,7 @@ public class HomeServlet extends HttpServlet {
             // rs = stmt.executeQuery("SELECT * FROM USERS");
 
             while(rs.next()) {
+                System.out.println("After rsNext"); 
                 OrderInfo orders = new OrderInfo();
 
                 // if(!newOrders.contains(rs.getInt("order_id"))) {
@@ -116,16 +126,21 @@ public class HomeServlet extends HttpServlet {
                 // if(!newOrders.contains(rs.getString("order_desc"))) {
                 //     orders.setDescription(rs.getString("order_desc"));   
                 // } 
+                System.out.println("New order created"); 
+
 
                 orders.setOrderID(rs.getInt("order_id"));
-                if (rs.getString("cust_name") == null) {
-                    orders.setCustomerName(" ");
-                } else {
-                    orders.setCustomerName(rs.getString("cust_name"));
-                }
+                System.out.println("order id set"); 
+
+                orders.setCustomerName(rs.getString("cust_name"));
+                System.out.println("cust name set");
+
                 
                 orders.setOrderDate(rs.getDate("order_date"));
-                orders.setDescription(rs.getString("order_desc"));   
+                System.out.println("order date set");
+
+                orders.setDescription(rs.getString("order_desc"));  
+                System.out.println("order desc set"); 
    
 
                 
@@ -139,6 +154,8 @@ public class HomeServlet extends HttpServlet {
                 // description.add(rs.getString("order_desc"));
                 // custName.add(rs.getString("cust_name"));
             }
+
+            System.out.println("querys finished");
 
             // newrs = stmt.executeQuery("select cust_name from customers");
 
@@ -176,12 +193,16 @@ public class HomeServlet extends HttpServlet {
             }
         }
 
+        System.out.println("before sort");
+
         Collections.sort(newOrders, new Comparator<OrderInfo>() {
             @Override
             public int compare(OrderInfo o1, OrderInfo o2) {
                 return o1.getOrderDate().compareTo(o2.getOrderDate());
             }
         });
+
+        System.out.println("after sort");
 
         session.setAttribute("cooldata", newOrders);
 
