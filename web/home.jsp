@@ -49,16 +49,16 @@
                 <th>Order Date</th>
                 <th>Description</th>
               </tr>
-                <c:forEach begin="0" var="outer" end="${cooldata.size()-1}" varStatus="loop1">
+                <c:forEach items="${cooldata}" var="item">
                   <tr>
 
-                      <th>${cooldata[loop1.index].getOrderID()}</th>
+                      <td>${item.orderID}</td>
                   
-                          <th>${cooldata[loop1.index].getCustomerName()}</th>
+                      <td>${item.customerName}</td>
 
-                          <th>${cooldata[loop1.index].getOrderDate()}</th>
+                      <td>${item.orderDate}</td>
 
-                          <th>${cooldata[loop1.index].getDescription()}</th>
+                      <td>${item.description}</td>
                   </tr>
                 </c:forEach>
                 

@@ -70,18 +70,7 @@ public class HomeServlet extends HttpServlet {
         ResultSet rs = null;
         ResultSet newrs = null;
 
-        
-
-        ArrayList<Object> orderID = new ArrayList<Object>();
-        ArrayList<Object> custName = new ArrayList<Object>();
-        ArrayList<Object> orderDate = new ArrayList<Object>();
-        ArrayList<Object> description = new ArrayList<Object>();
-
         ArrayList<OrderInfo> newOrders = new ArrayList<OrderInfo>();
-
-
-
-
 
         //Get data from derby
         try {
@@ -92,12 +81,18 @@ public class HomeServlet extends HttpServlet {
 
             stmt = con.createStatement();
 
-            //query the cust and order tables 
-            //not sure if necessary to order
-            // since it's ordered at the bottom already
+            /**
+             * query the cust and order tables
+             * not sure if necessary to order
+             * since it's ordered at the bottom already
+             */
             System.out.println("Before query"); 
 
-
+            /**
+             * The Query
+             * connects both tables at cust_id so customers names 
+             * aren't duplicated for each order
+             */
             String sql = "SELECT o.*, c.cust_name" +
                          " FROM orders o, customers c" +
                          " WHERE o.cust_id = c.cust_id";
@@ -105,66 +100,28 @@ public class HomeServlet extends HttpServlet {
             System.out.println("After query"); 
             
             rs = stmt.executeQuery(sql);
-            // st.close();
-            // stmt = con.createStatement();
-    
-            // rs = stmt.executeQuery("SELECT * FROM USERS");
 
+            
             while(rs.next()) {
-                System.out.println("After rsNext"); 
+
+                /**Creates new Order object
+                 * sets all the necessary data from the query and
+                 * adds each object to the "newOrders" array list
+                 */
                 OrderInfo orders = new OrderInfo();
 
-                // if(!newOrders.contains(rs.getInt("order_id"))) {
-                //     orders.setOrderID(rs.getInt("order_id"));
-                // } 
-                // if(!newOrders.contains(rs.getString("cust_name"))) {
-                //     orders.setCustomerName(rs.getString("cust_name"));   
-                // } 
-                // if(!newOrders.contains(rs.getDate("order_date"))) {
-                //     orders.setOrderDate(rs.getDate("order_date"));   
-                // } 
-                // if(!newOrders.contains(rs.getString("order_desc"))) {
-                //     orders.setDescription(rs.getString("order_desc"));   
-                // } 
-                System.out.println("New order created"); 
-
-
                 orders.setOrderID(rs.getInt("order_id"));
-                System.out.println("order id set"); 
 
                 orders.setCustomerName(rs.getString("cust_name"));
-                System.out.println("cust name set");
-
                 
                 orders.setOrderDate(rs.getDate("order_date"));
-                System.out.println("order date set");
 
-                orders.setDescription(rs.getString("order_desc"));  
-                System.out.println("order desc set"); 
-   
-
-                
-                
+                orders.setDescription(rs.getString("order_desc"));              
 
                 newOrders.add(orders);
-
-
-                // orderID.add(rs.getInt("order_id"));
-                // orderDate.add(rs.getDate("order_date"));
-                // description.add(rs.getString("order_desc"));
-                // custName.add(rs.getString("cust_name"));
             }
 
-            System.out.println("querys finished");
-
-            // newrs = stmt.executeQuery("select cust_name from customers");
-
-
-            // while(newrs.next()) {
-            //     custName.add(newrs.getString("cust_name"));
-            // }
-
-            //try to print DB info
+            //Print DB info to page to make sure it's connected
 
             String productInfo = con.getMetaData().getDatabaseProductName();
 
@@ -193,8 +150,9 @@ public class HomeServlet extends HttpServlet {
             }
         }
 
-        System.out.println("before sort");
-
+        /**
+         * Sorts all order objects by date ascending
+         */
         Collections.sort(newOrders, new Comparator<OrderInfo>() {
             @Override
             public int compare(OrderInfo o1, OrderInfo o2) {
@@ -206,22 +164,7 @@ public class HomeServlet extends HttpServlet {
 
         session.setAttribute("cooldata", newOrders);
 
-
-        session.setAttribute("orderID", orderID);
-        session.setAttribute("custName", custName);
-        session.setAttribute("orderDate", orderDate);
-        session.setAttribute("description", description);
-
         response.sendRedirect ("home.jsp");
-
-
-
-        // Collections.sort(orderInfo, new Comparator<OrderInfo>() {
-        //     @Override
-        //     public int compare(Person p1, Person p2){
-        //         return p1.getIndex().compareTo(p2.getIndex());
-        //     }
-        // });
 
     }
 }
