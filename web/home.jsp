@@ -43,7 +43,7 @@
           <input type="hidden" name="selectedValue" value=""/>
           <select name="dropDown">
 
-            <option value="all" >All Orders</option>
+            <option value="1">All Orders</option>
             <c:forEach items="${masterList}" var="items">
               <option value="${items.customerName}">${items.customerName}</option>
             </c:forEach>

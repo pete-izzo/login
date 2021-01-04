@@ -68,7 +68,6 @@ public class HomeServlet extends HttpServlet {
         Connection con = null;
         Statement stmt = null;
         ResultSet rs = null;
-        ResultSet newrs = null;
 
         ArrayList<OrderInfo> newOrders = new ArrayList<OrderInfo>();
 
@@ -141,7 +140,6 @@ public class HomeServlet extends HttpServlet {
         } finally {
             try {
                 rs.close();
-                // newrs.close();
                 stmt.close();
                 con.close();
                 ctx.close();
@@ -183,36 +181,29 @@ public class HomeServlet extends HttpServlet {
     }
 
     /**
-     * Post for dropdown selection
+     * //////////////////////////
+     * Post method for dropdown selection
+     * //////////////////////////
      */
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-            HttpSession session = request.getSession();
+        HttpSession session = request.getSession();
 
-            String myUserName = (String)session.getAttribute("name");
+        String myUserName = (String)session.getAttribute("name");
 
-            String isLoggedIn = (String)session.getAttribute("logged");
+        String isLoggedIn = (String)session.getAttribute("logged");
 
-            ArrayList<OrderInfo> newOrders = (ArrayList)session.getAttribute("cooldata");
+        //Should be  grabbed from session just so we can clear it 
+        //to make room for the other queries
+        ArrayList<OrderInfo> newOrders = (ArrayList)session.getAttribute("cooldata");
 
-            String choice =  request.getParameter("dropDown");
+        // Dropdown choice
+        String choice =  request.getParameter("dropDown");
 
-            System.out.println(choice); 
-            System.out.println(choice.getClass());
+        ArrayList<OrderInfo> custOrders = new ArrayList<OrderInfo>();
 
-
-            ArrayList<OrderInfo> custOrders = new ArrayList<OrderInfo>();
-
-
-
-            /**
-             * db query needs to be updated with 
-             * new query and then saved to session so
-             * home.jsp can post it
-             */
-
-             /**
+        /**
          * /////////////
          * DB INFO
          * /////////////
@@ -226,9 +217,11 @@ public class HomeServlet extends HttpServlet {
         Connection conn = null;
         Statement statement = null;
         ResultSet resultset = null;
-        ResultSet newrs = null;
 
-        //clear "new orders" array so new items can go in
+        /**
+         * clear "new orders" and "custOrders" array's so the tables on the
+         * page only display what is queried
+         */
         custOrders.clear();
         newOrders.clear();
 
@@ -242,20 +235,18 @@ public class HomeServlet extends HttpServlet {
             statement = conn.createStatement();
 
             /**
-             * query the cust and order tables
-             * not sure if necessary to order
-             * since it's ordered at the bottom already
-             */
-            System.out.println("Before updated query"); 
-
-            /**
              * New Query
-             * querys and displays info based on dropdown selection
+             * queries and displays info based on dropdown selection
              */
 
             String newQuery = null;
 
-            if (choice == "'all'"){
+            /**
+             * Need to use ".equals()" here because
+             * simply using "==" means the value is in the same
+             * address in memory. Which it isn't.
+             */
+            if (choice.equals("1")){
                 newQuery = "SELECT o.*, c.cust_name" +
                 " FROM orders o, customers c" +
                 " WHERE o.cust_id = c.cust_id";
@@ -268,19 +259,11 @@ public class HomeServlet extends HttpServlet {
 
             }
 
-            System.out.println("After updated query"); 
-            System.out.println("The query: " + newQuery); 
-
-            
             resultset = statement.executeQuery(newQuery);
 
             
             while(resultset.next()) {
 
-                /**Creates new Order object
-                 * sets all the necessary data from the query and
-                 * adds each object to the "newOrders" array list
-                 */
                 OrderInfo orders = new OrderInfo();
 
                 orders.setOrderID(resultset.getInt("order_id"));
@@ -293,13 +276,6 @@ public class HomeServlet extends HttpServlet {
 
                 custOrders.add(orders);
             }
-
-            //Print DB info to page to make sure it's connected
-
-            String productInfo = conn.getMetaData().getDatabaseProductName();
-
-            session.setAttribute("DBProductInfo", productInfo);
-
             
         } catch (NamingException ex) {
 
@@ -309,7 +285,6 @@ public class HomeServlet extends HttpServlet {
         } finally {
             try {
                 resultset.close();
-                // newrs.close();
                 statement.close();
                 conn.close();
                 context.close();
@@ -322,11 +297,6 @@ public class HomeServlet extends HttpServlet {
                 error.printStackTrace();
             }
         }
-
-        System.out.println("After updated list create"); 
-        System.out.println(custOrders); 
-
-
 
         /**
          * Sorts all order objects by date ascending
