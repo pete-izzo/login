@@ -43,11 +43,10 @@
           <input type="hidden" name="selectedValue" value=""/>
           <select name="dropDown">
 
-            <option value="*" >All Orders</option>
-            <c:forEach items="${cooldata}" var="items">
-              <option value="${item.customerName}">${items.customerName}</option>
+            <option value="all" >All Orders</option>
+            <c:forEach items="${masterList}" var="items">
+              <option value="${items.customerName}">${items.customerName}</option>
             </c:forEach>
-            <option value="Donny"></option>
           </select>
 
           <input type="submit" value="Submit" />

@@ -72,6 +72,10 @@ public class HomeServlet extends HttpServlet {
 
         ArrayList<OrderInfo> newOrders = new ArrayList<OrderInfo>();
 
+        //Master list created so you can always query every customer later
+        ArrayList<OrderInfo> masterList = new ArrayList<OrderInfo>();
+
+
         //Get data from derby
         try {
             ctx = new InitialContext();
@@ -119,6 +123,7 @@ public class HomeServlet extends HttpServlet {
                 orders.setDescription(rs.getString("order_desc"));              
 
                 newOrders.add(orders);
+                masterList.add(orders);
             }
 
             //Print DB info to page to make sure it's connected
@@ -160,17 +165,25 @@ public class HomeServlet extends HttpServlet {
             }
         });
 
+        Collections.sort(masterList, new Comparator<OrderInfo>() {
+            @Override
+            public int compare(OrderInfo o1, OrderInfo o2) {
+                return o1.getOrderDate().compareTo(o2.getOrderDate());
+            }
+        });
+
         System.out.println("after sort");
 
         session.setAttribute("cooldata", newOrders);
+        session.setAttribute("masterList", masterList);
+
 
         response.sendRedirect ("home.jsp");
 
     }
 
     /**
-     * Post for form submission
-     * to edit query?
+     * Post for dropdown selection
      */
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -186,6 +199,7 @@ public class HomeServlet extends HttpServlet {
             String choice =  request.getParameter("dropDown");
 
             System.out.println(choice); 
+            System.out.println(choice.getClass());
 
 
             ArrayList<OrderInfo> custOrders = new ArrayList<OrderInfo>();
@@ -235,20 +249,30 @@ public class HomeServlet extends HttpServlet {
             System.out.println("Before updated query"); 
 
             /**
-             * The Query
-             * connects both tables at cust_id so customers names 
-             * aren't duplicated for each order
+             * New Query
+             * querys and displays info based on dropdown selection
              */
-            String sql = "SELECT o.*, c.cust_name" +
-                         " FROM orders o, customers c" +
-                         " WHERE o.cust_id = c.cust_id" +
-                         " AND c.cust_name = '" + choice + "'";
+
+            String newQuery = null;
+
+            if (choice == "'all'"){
+                newQuery = "SELECT o.*, c.cust_name" +
+                " FROM orders o, customers c" +
+                " WHERE o.cust_id = c.cust_id";
+
+            } else{
+                newQuery = "SELECT o.*, c.cust_name" +
+                " FROM orders o, customers c" +
+                " WHERE o.cust_id = c.cust_id" +
+                " AND c.cust_name = '" + choice + "'";
+
+            }
 
             System.out.println("After updated query"); 
-            System.out.println(sql); 
+            System.out.println("The query: " + newQuery); 
 
             
-            resultset = statement.executeQuery(sql);
+            resultset = statement.executeQuery(newQuery);
 
             
             while(resultset.next()) {
@@ -314,9 +338,10 @@ public class HomeServlet extends HttpServlet {
             }
         });
             
-        
+        //list with new query objects
         session.setAttribute("custOrders", custOrders);
 
+        //refreshes current page instead of sending elsewhere
         response.setHeader("Refresh", "0; URL=/login/home.jsp");
 
     
