@@ -40,7 +40,6 @@
 
         <form action="HomeServlet" method="POST">
 
-          <input type="hidden" name="selectedValue" value=""/>
           <select name="dropDown">
 
             <option value="1">All Orders</option>
