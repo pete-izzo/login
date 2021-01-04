@@ -40,11 +40,14 @@
 
         <form action="HomeServlet" method="POST">
 
-          <select name="something">
-            <option value="#">All Orders</option>
+          <input type="hidden" name="selectedValue" value=""/>
+          <select name="dropDown">
+
+            <option value="*" >All Orders</option>
             <c:forEach items="${cooldata}" var="items">
               <option value="${item.customerName}">${items.customerName}</option>
             </c:forEach>
+            <option value="Donny"></option>
           </select>
 
           <input type="submit" value="Submit" />
@@ -69,6 +72,19 @@
                 <th>Description</th>
               </tr>
                 <c:forEach items="${cooldata}" var="item">
+                  <tr>
+
+                      <td>${item.orderID}</td>
+                  
+                      <td>${item.customerName}</td>
+
+                      <td>${item.orderDate}</td>
+
+                      <td>${item.description}</td>
+                  </tr>
+                </c:forEach>
+
+                <c:forEach items="${custOrders}" var="item">
                   <tr>
 
                       <td>${item.orderID}</td>

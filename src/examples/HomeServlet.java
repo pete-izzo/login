@@ -172,15 +172,24 @@ public class HomeServlet extends HttpServlet {
      * Post for form submission
      * to edit query?
      */
-    @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-            HttpSession session = request.getSession(false);
+            HttpSession session = request.getSession();
 
             String myUserName = (String)session.getAttribute("name");
 
             String isLoggedIn = (String)session.getAttribute("logged");
+
+            ArrayList<OrderInfo> newOrders = (ArrayList)session.getAttribute("cooldata");
+
+            String choice =  request.getParameter("dropDown");
+
+            System.out.println(choice); 
+
+
+            ArrayList<OrderInfo> custOrders = new ArrayList<OrderInfo>();
+
 
 
             /**
@@ -188,7 +197,128 @@ public class HomeServlet extends HttpServlet {
              * new query and then saved to session so
              * home.jsp can post it
              */
-            session.setAttribute("newDBQuery", newDBQuery)
+
+             /**
+         * /////////////
+         * DB INFO
+         * /////////////
+         */
+
+        String dbURL ="java:comp/env/jdbc/NewDBTest";
+
+        String driver = "org.apache.derby.jdbc.EmbeddedDriver";
+
+        Context context = null;
+        Connection conn = null;
+        Statement statement = null;
+        ResultSet resultset = null;
+        ResultSet newrs = null;
+
+        //clear "new orders" array so new items can go in
+        custOrders.clear();
+        newOrders.clear();
+
+        //Get data from derby
+        try {
+            context = new InitialContext();
+            DataSource dsource = (DataSource) context.lookup("java:comp/env/jdbc/firstDB");
+
+            conn = dsource.getConnection();
+
+            statement = conn.createStatement();
+
+            /**
+             * query the cust and order tables
+             * not sure if necessary to order
+             * since it's ordered at the bottom already
+             */
+            System.out.println("Before updated query"); 
+
+            /**
+             * The Query
+             * connects both tables at cust_id so customers names 
+             * aren't duplicated for each order
+             */
+            String sql = "SELECT o.*, c.cust_name" +
+                         " FROM orders o, customers c" +
+                         " WHERE o.cust_id = c.cust_id" +
+                         " AND c.cust_name = '" + choice + "'";
+
+            System.out.println("After updated query"); 
+            System.out.println(sql); 
+
+            
+            resultset = statement.executeQuery(sql);
+
+            
+            while(resultset.next()) {
+
+                /**Creates new Order object
+                 * sets all the necessary data from the query and
+                 * adds each object to the "newOrders" array list
+                 */
+                OrderInfo orders = new OrderInfo();
+
+                orders.setOrderID(resultset.getInt("order_id"));
+
+                orders.setCustomerName(resultset.getString("cust_name"));
+                
+                orders.setOrderDate(resultset.getDate("order_date"));
+
+                orders.setDescription(resultset.getString("order_desc"));              
+
+                custOrders.add(orders);
+            }
+
+            //Print DB info to page to make sure it's connected
+
+            String productInfo = conn.getMetaData().getDatabaseProductName();
+
+            session.setAttribute("DBProductInfo", productInfo);
+
+            
+        } catch (NamingException ex) {
+
+            ex.printStackTrace();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        } finally {
+            try {
+                resultset.close();
+                // newrs.close();
+                statement.close();
+                conn.close();
+                context.close();
+
+
+    
+            }catch (SQLException error) {
+                error.printStackTrace();
+            }catch (NamingException error) {
+                error.printStackTrace();
+            }
+        }
+
+        System.out.println("After updated list create"); 
+        System.out.println(custOrders); 
+
+
+
+        /**
+         * Sorts all order objects by date ascending
+         */
+        Collections.sort(custOrders, new Comparator<OrderInfo>() {
+            @Override
+            public int compare(OrderInfo o1, OrderInfo o2) {
+                return o1.getOrderDate().compareTo(o2.getOrderDate());
+            }
+        });
+            
+        
+        session.setAttribute("custOrders", custOrders);
+
+        response.setHeader("Refresh", "0; URL=/login/home.jsp");
+
     
     }
 }
