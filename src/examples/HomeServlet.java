@@ -51,7 +51,6 @@ public class HomeServlet extends HttpServlet {
 
         // Dropdown choice
         String choice =  request.getParameter("dropDown");
-        System.out.println(choice);
 
         /**
          * New Query
@@ -146,9 +145,7 @@ public class HomeServlet extends HttpServlet {
     
                     custOrders.add(orders);
                 }
-            }
-            System.out.println(masterList);
-     
+            }     
             while(rs.next()) {
 
                 /**Creates new Order object
