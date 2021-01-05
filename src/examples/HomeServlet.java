@@ -49,11 +49,17 @@ public class HomeServlet extends HttpServlet {
 
         String isLoggedIn = (String)session.getAttribute("logged");
 
-        System.out.println("first");
+        // Dropdown choice
+        String choice =  request.getParameter("dropDown");
+        System.out.println("got choice");
 
+        /**
+         * New Query
+         * queries and displays info based on dropdown selection
+         */
 
-       
-        
+        String newQuery = null;
+
         /**
          * /////////////
          * DB INFO
@@ -67,42 +73,99 @@ public class HomeServlet extends HttpServlet {
         Context ctx = null;
         Connection con = null;
         Statement stmt = null;
+        Statement statement = null;
         ResultSet rs = null;
-
-        ArrayList<OrderInfo> newOrders = new ArrayList<OrderInfo>();
+        ResultSet resultset = null;
 
         //Master list created so you can always query every customer later
         ArrayList<OrderInfo> masterList = new ArrayList<OrderInfo>();
 
+        ArrayList<OrderInfo> newOrders = new ArrayList<OrderInfo>();
+
+        ArrayList<OrderInfo> custOrders = new ArrayList<OrderInfo>();
+
+
 
         //Get data from derby
         try {
+
+            System.out.println("initial db connect");
+
             ctx = new InitialContext();
             DataSource ds = (DataSource) ctx.lookup("java:comp/env/jdbc/firstDB");
 
             con = ds.getConnection();
 
             stmt = con.createStatement();
-
-            /**
-             * query the cust and order tables
-             * not sure if necessary to order
-             * since it's ordered at the bottom already
-             */
-            System.out.println("Before query"); 
-
+            statement = con.createStatement();
             /**
              * The Query
              * connects both tables at cust_id so customers names 
              * aren't duplicated for each order
              */
+
+
             String sql = "SELECT o.*, c.cust_name" +
                          " FROM orders o, customers c" +
                          " WHERE o.cust_id = c.cust_id";
-
-            System.out.println("After query"); 
             
             rs = stmt.executeQuery(sql);
+
+            /**
+            * New Query
+            * queries and displays info based on dropdown selection
+            */
+
+            /**
+             * Need to use ".equals()" here because
+             * simply using "==" means the value is in the same
+             * address in memory. Which it isn't.
+             */
+            System.out.println("before if/else");
+            System.out.println(choice);
+
+            if(choice != null) {
+                System.out.println(masterList);
+
+
+                if (choice.equals("1")){
+                    System.out.println("inside if");
+    
+                    newQuery = "SELECT o.*, c.cust_name" +
+                    " FROM orders o, customers c" +
+                    " WHERE o.cust_id = c.cust_id";
+        
+    
+                } else{
+                    newQuery = "SELECT o.*, c.cust_name" +
+                    " FROM orders o, customers c" +
+                    " WHERE o.cust_id = c.cust_id" +
+                    " AND c.cust_name = '" + choice + "'";
+        
+    
+                }
+                resultset = statement.executeQuery(newQuery);
+
+                while(resultset.next()) {
+    
+                    OrderInfo orders = new OrderInfo();
+    
+                    orders.setOrderID(resultset.getInt("order_id"));
+    
+                    orders.setCustomerName(resultset.getString("cust_name"));
+                    
+                    orders.setOrderDate(resultset.getDate("order_date"));
+    
+                    orders.setDescription(resultset.getString("order_desc"));              
+    
+                    custOrders.add(orders);
+                }
+    
+    
+            }
+            System.out.println(masterList);
+
+           
 
             
             while(rs.next()) {
@@ -131,7 +194,8 @@ public class HomeServlet extends HttpServlet {
 
             session.setAttribute("DBProductInfo", productInfo);
 
-            
+            System.out.println("end db");
+
         } catch (NamingException ex) {
 
             ex.printStackTrace();
@@ -156,6 +220,8 @@ public class HomeServlet extends HttpServlet {
         /**
          * Sorts all order objects by date ascending
          */
+        System.out.println("begin sort");
+
         Collections.sort(newOrders, new Comparator<OrderInfo>() {
             @Override
             public int compare(OrderInfo o1, OrderInfo o2) {
@@ -170,10 +236,22 @@ public class HomeServlet extends HttpServlet {
             }
         });
 
+        Collections.sort(custOrders, new Comparator<OrderInfo>() {
+            @Override
+            public int compare(OrderInfo o1, OrderInfo o2) {
+                return o1.getOrderDate().compareTo(o2.getOrderDate());
+            }
+        });
+
+
         System.out.println("after sort");
 
         session.setAttribute("cooldata", newOrders);
         session.setAttribute("masterList", masterList);
+
+        //list with new query objects
+        session.setAttribute("custOrders", custOrders);
+
 
 
         response.sendRedirect ("home.jsp");
@@ -188,128 +266,109 @@ public class HomeServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        HttpSession session = request.getSession();
 
-        String myUserName = (String)session.getAttribute("name");
+        doGet(request, response);
+        System.out.println("doGet call");
 
-        String isLoggedIn = (String)session.getAttribute("logged");
+        // HttpSession session = request.getSession();
 
-        //Should be  grabbed from session just so we can clear it 
-        //to make room for the other queries
-        ArrayList<OrderInfo> newOrders = (ArrayList)session.getAttribute("cooldata");
+        // String myUserName = (String)session.getAttribute("name");
 
-        // Dropdown choice
-        String choice =  request.getParameter("dropDown");
+        // String isLoggedIn = (String)session.getAttribute("logged");
 
-        ArrayList<OrderInfo> custOrders = new ArrayList<OrderInfo>();
+        // //Should be  grabbed from session just so we can clear it 
+        // //to make room for the other queries
+        // ArrayList<OrderInfo> newOrders = (ArrayList)session.getAttribute("cooldata");
 
-        /**
-         * /////////////
-         * DB INFO
-         * /////////////
-         */
 
-        String dbURL ="java:comp/env/jdbc/NewDBTest";
+        // /**
+        //  * /////////////
+        //  * DB INFO
+        //  * /////////////
+        //  */
 
-        String driver = "org.apache.derby.jdbc.EmbeddedDriver";
+        // String dbURL ="java:comp/env/jdbc/NewDBTest";
 
-        Context context = null;
-        Connection conn = null;
-        Statement statement = null;
-        ResultSet resultset = null;
+        // String driver = "org.apache.derby.jdbc.EmbeddedDriver";
+
+        // Context context = null;
+        // Connection conn = null;
+        // Statement statement = null;
+        // ResultSet resultset = null;
 
         /**
          * clear "new orders" and "custOrders" array's so the tables on the
          * page only display what is queried
          */
-        custOrders.clear();
-        newOrders.clear();
 
-        //Get data from derby
-        try {
-            context = new InitialContext();
-            DataSource dsource = (DataSource) context.lookup("java:comp/env/jdbc/firstDB");
+        // //Get data from derby
+        // try {
+        //     context = new InitialContext();
+        //     DataSource dsource = (DataSource) context.lookup("java:comp/env/jdbc/firstDB");
 
-            conn = dsource.getConnection();
+        //     conn = dsource.getConnection();
 
-            statement = conn.createStatement();
+        //     statement = conn.createStatement();
 
-            /**
-             * New Query
-             * queries and displays info based on dropdown selection
-             */
 
-            String newQuery = null;
+        //     /**
+        //      * Need to use ".equals()" here because
+        //      * simply using "==" means the value is in the same
+        //      * address in memory. Which it isn't.
+        //      */
+        //     if (choice.equals("1")){
+        //         newQuery = "SELECT o.*, c.cust_name" +
+        //         " FROM orders o, customers c" +
+        //         " WHERE o.cust_id = c.cust_id";
 
-            /**
-             * Need to use ".equals()" here because
-             * simply using "==" means the value is in the same
-             * address in memory. Which it isn't.
-             */
-            if (choice.equals("1")){
-                newQuery = "SELECT o.*, c.cust_name" +
-                " FROM orders o, customers c" +
-                " WHERE o.cust_id = c.cust_id";
+        //     } else{
+        //         newQuery = "SELECT o.*, c.cust_name" +
+        //         " FROM orders o, customers c" +
+        //         " WHERE o.cust_id = c.cust_id" +
+        //         " AND c.cust_name = '" + choice + "'";
 
-            } else{
-                newQuery = "SELECT o.*, c.cust_name" +
-                " FROM orders o, customers c" +
-                " WHERE o.cust_id = c.cust_id" +
-                " AND c.cust_name = '" + choice + "'";
+        //     }
 
-            }
-
-            resultset = statement.executeQuery(newQuery);
+        //     resultset = statement.executeQuery(newQuery);
 
             
-            while(resultset.next()) {
+        //     while(resultset.next()) {
 
-                OrderInfo orders = new OrderInfo();
+        //         OrderInfo orders = new OrderInfo();
 
-                orders.setOrderID(resultset.getInt("order_id"));
+        //         orders.setOrderID(resultset.getInt("order_id"));
 
-                orders.setCustomerName(resultset.getString("cust_name"));
+        //         orders.setCustomerName(resultset.getString("cust_name"));
                 
-                orders.setOrderDate(resultset.getDate("order_date"));
+        //         orders.setOrderDate(resultset.getDate("order_date"));
 
-                orders.setDescription(resultset.getString("order_desc"));              
+        //         orders.setDescription(resultset.getString("order_desc"));              
 
-                custOrders.add(orders);
-            }
+        //         custOrders.add(orders);
+        //     }
             
-        } catch (NamingException ex) {
+        // } catch (NamingException ex) {
 
-            ex.printStackTrace();
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-        } finally {
-            try {
-                resultset.close();
-                statement.close();
-                conn.close();
-                context.close();
+        //     ex.printStackTrace();
+        // } catch (SQLException ex) {
+        //     ex.printStackTrace();
+        // } finally {
+        //     try {
+        //         resultset.close();
+        //         statement.close();
+        //         conn.close();
+        //         context.close();
 
 
     
-            }catch (SQLException error) {
-                error.printStackTrace();
-            }catch (NamingException error) {
-                error.printStackTrace();
-            }
-        }
+        //     }catch (SQLException error) {
+        //         error.printStackTrace();
+        //     }catch (NamingException error) {
+        //         error.printStackTrace();
+        //     }
+        // }
 
-        /**
-         * Sorts all order objects by date ascending
-         */
-        Collections.sort(custOrders, new Comparator<OrderInfo>() {
-            @Override
-            public int compare(OrderInfo o1, OrderInfo o2) {
-                return o1.getOrderDate().compareTo(o2.getOrderDate());
-            }
-        });
             
-        //list with new query objects
-        session.setAttribute("custOrders", custOrders);
 
         //refreshes current page instead of sending elsewhere
         response.setHeader("Refresh", "0; URL=/login/home.jsp");
