@@ -75,6 +75,7 @@ public class HomeServlet extends HttpServlet {
         Statement statement = null;
         ResultSet rs = null;
         ResultSet resultset = null;
+        String sql;
 
         //Master list created so you can always query every customer later
         ArrayList<OrderInfo> masterList = new ArrayList<OrderInfo>();
@@ -94,18 +95,6 @@ public class HomeServlet extends HttpServlet {
             stmt = con.createStatement();
             statement = con.createStatement();
             /**
-             * The Query
-             * connects both tables at cust_id so customers names 
-             * aren't duplicated for each order
-             */
-
-            String sql = "SELECT o.*, c.cust_name" +
-                         " FROM orders o, customers c" +
-                         " WHERE o.cust_id = c.cust_id";
-            
-            rs = stmt.executeQuery(sql);
-
-            /**
             * New Query
             * queries and displays info based on dropdown selection
             */
@@ -115,68 +104,114 @@ public class HomeServlet extends HttpServlet {
              * simply using "==" means the value is in the same
              * address in memory. Which it isn't.
              */
+            if (choice == null) {
+                System.out.println("choice = null");
+                /**
+                 * The Query
+                 * connects both tables at cust_id so customers names 
+                 * aren't duplicated for each order
+                 */
 
-            if(choice != null) {
-                custOrders.clear();
+                sql = "SELECT o.*, c.cust_name" +
+                " FROM orders o, customers c" +
+                " WHERE o.cust_id = c.cust_id";
+
+                rs = stmt.executeQuery(sql);
+                System.out.println("init rs set");
+
+
+                while(rs.next()) {
+
+                    /**Creates new Order object
+                     * sets all the necessary data from the query and
+                     * adds each object to the "newOrders" array list
+                     */
+                    OrderInfo orders = new OrderInfo();
+    
+                    orders.setOrderID(rs.getInt("order_id"));
+    
+                    orders.setCustomerName(rs.getString("cust_name"));
+                    
+                    orders.setOrderDate(rs.getDate("order_date"));
+    
+                    orders.setDescription(rs.getString("order_desc"));              
+    
+                    newOrders.add(orders);
+                    masterList.add(orders);
+                    // if(choice != null) {
+                    //     newOrders.clear();
+                
+                    // }
+                    System.out.println("master list and neworder set");
+
+    
+                    }
+
+            } if(choice != null) {
+                newOrders.clear();
+                System.out.println(newOrders);
+                System.out.println("neworder cleared");
+
 
                 if (choice.equals("1")){    
-                    newQuery = "SELECT o.*, c.cust_name" +
+                    sql = "SELECT o.*, c.cust_name" +
                     " FROM orders o, customers c" +
                     " WHERE o.cust_id = c.cust_id";
-                    resultset = statement.executeQuery(newQuery);
+                    rs = statement.executeQuery(sql);
+
+                    System.out.println("choice = 1");
+
                 } else{
-                    newQuery = "SELECT o.*, c.cust_name" +
+                    sql = "SELECT o.*, c.cust_name" +
                     " FROM orders o, customers c" +
                     " WHERE o.cust_id = c.cust_id" +
                     " AND c.cust_name = ?";
-                    PreparedStatement preparedStatement = con.prepareStatement(newQuery);
+                    PreparedStatement preparedStatement = con.prepareStatement(sql);
                     preparedStatement.setString(1, choice);
-                    resultset = preparedStatement.executeQuery();
+                    rs = preparedStatement.executeQuery();
+
+                    System.out.println("choice = single cust");
+
                 }
                 
 
-                while(resultset.next()) {
+                while(rs.next()) {
+
+                    System.out.println("rs next is set");
     
                     OrderInfo orders = new OrderInfo();
+                    System.out.println("new order");
+
     
-                    orders.setOrderID(resultset.getInt("order_id"));
+                    orders.setOrderID(rs.getInt("order_id"));
+                    System.out.println("order id set");
     
-                    orders.setCustomerName(resultset.getString("cust_name"));
+                    orders.setCustomerName(rs.getString("cust_name"));
+                    System.out.println("cust name set");
                     
-                    orders.setOrderDate(resultset.getDate("order_date"));
+                    orders.setOrderDate(rs.getDate("order_date"));
+                    System.out.println("order date set");
     
-                    orders.setDescription(resultset.getString("order_desc"));              
+                    orders.setDescription(rs.getString("order_desc"));
+                    System.out.println("order desc set");
+              
     
-                    custOrders.add(orders);
+                    newOrders.add(orders);
+                    masterList.add(orders);
+                    System.out.println(newOrders);
+
+
+                    System.out.println("choice isn't null and query should be complete");
+
                 }
             }     
-            while(rs.next()) {
-
-                /**Creates new Order object
-                 * sets all the necessary data from the query and
-                 * adds each object to the "newOrders" array list
-                 */
-                OrderInfo orders = new OrderInfo();
-
-                orders.setOrderID(rs.getInt("order_id"));
-
-                orders.setCustomerName(rs.getString("cust_name"));
-                
-                orders.setOrderDate(rs.getDate("order_date"));
-
-                orders.setDescription(rs.getString("order_desc"));              
-
-                newOrders.add(orders);
-                masterList.add(orders);
-                if(choice != null) {
-                    newOrders.clear();
             
-                }
-            }
 
             //Print DB info to page to make sure it's connected
 
             String productInfo = con.getMetaData().getDatabaseProductName();
+            System.out.println(productInfo);
+
 
             session.setAttribute("DBProductInfo", productInfo);
 
@@ -188,9 +223,6 @@ public class HomeServlet extends HttpServlet {
         } finally {
             try {
                 rs.close();
-                if(choice != null) {
-                    resultset.close();
-                }
                 stmt.close();
                 con.close();
                 ctx.close();
@@ -218,21 +250,27 @@ public class HomeServlet extends HttpServlet {
             }
         });
 
-        Collections.sort(custOrders, new Comparator<OrderInfo>() {
-            @Override
-            public int compare(OrderInfo o1, OrderInfo o2) {
-                return o1.getOrderDate().compareTo(o2.getOrderDate());
-            }
-        });
+        System.out.println("arrays sorted");
+
+
+        // Collections.sort(custOrders, new Comparator<OrderInfo>() {
+        //     @Override
+        //     public int compare(OrderInfo o1, OrderInfo o2) {
+        //         return o1.getOrderDate().compareTo(o2.getOrderDate());
+        //     }
+        // });
 
 
         session.setAttribute("cooldata", newOrders);
         session.setAttribute("masterList", masterList);
 
         //list with new query objects
-        session.setAttribute("custOrders", custOrders);
+        // session.setAttribute("custOrders", custOrders);
 
         response.sendRedirect ("home.jsp");
+
+        System.out.println("everything should be set");
+
     }
 
     /**
