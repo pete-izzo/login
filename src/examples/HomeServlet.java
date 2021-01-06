@@ -123,13 +123,17 @@ public class HomeServlet extends HttpServlet {
                     newQuery = "SELECT o.*, c.cust_name" +
                     " FROM orders o, customers c" +
                     " WHERE o.cust_id = c.cust_id";
+                    resultset = statement.executeQuery(newQuery);
                 } else{
                     newQuery = "SELECT o.*, c.cust_name" +
                     " FROM orders o, customers c" +
                     " WHERE o.cust_id = c.cust_id" +
-                    " AND c.cust_name = '" + choice + "'";
+                    " AND c.cust_name = ?";
+                    PreparedStatement preparedStatement = con.prepareStatement(newQuery);
+                    preparedStatement.setString(1, choice);
+                    resultset = preparedStatement.executeQuery();
                 }
-                resultset = statement.executeQuery(newQuery);
+                
 
                 while(resultset.next()) {
     
