@@ -105,7 +105,6 @@ public class HomeServlet extends HttpServlet {
              * address in memory. Which it isn't.
              */
             if (choice == null) {
-                System.out.println("choice = null");
                 /**
                  * The Query
                  * connects both tables at cust_id so customers names 
@@ -117,8 +116,6 @@ public class HomeServlet extends HttpServlet {
                 " WHERE o.cust_id = c.cust_id";
 
                 rs = stmt.executeQuery(sql);
-                System.out.println("init rs set");
-
 
                 while(rs.next()) {
 
@@ -138,28 +135,18 @@ public class HomeServlet extends HttpServlet {
     
                     newOrders.add(orders);
                     masterList.add(orders);
-                    // if(choice != null) {
-                    //     newOrders.clear();
-                
-                    // }
-                    System.out.println("master list and neworder set");
 
     
                     }
 
             } if(choice != null) {
                 newOrders.clear();
-                System.out.println(newOrders);
-                System.out.println("neworder cleared");
-
 
                 if (choice.equals("1")){    
                     sql = "SELECT o.*, c.cust_name" +
                     " FROM orders o, customers c" +
                     " WHERE o.cust_id = c.cust_id";
                     rs = statement.executeQuery(sql);
-
-                    System.out.println("choice = 1");
 
                 } else{
                     sql = "SELECT o.*, c.cust_name" +
@@ -170,38 +157,23 @@ public class HomeServlet extends HttpServlet {
                     preparedStatement.setString(1, choice);
                     rs = preparedStatement.executeQuery();
 
-                    System.out.println("choice = single cust");
-
                 }
                 
 
                 while(rs.next()) {
-
-                    System.out.println("rs next is set");
     
                     OrderInfo orders = new OrderInfo();
-                    System.out.println("new order");
-
     
                     orders.setOrderID(rs.getInt("order_id"));
-                    System.out.println("order id set");
     
                     orders.setCustomerName(rs.getString("cust_name"));
-                    System.out.println("cust name set");
                     
                     orders.setOrderDate(rs.getDate("order_date"));
-                    System.out.println("order date set");
     
-                    orders.setDescription(rs.getString("order_desc"));
-                    System.out.println("order desc set");
-              
+                    orders.setDescription(rs.getString("order_desc"));              
     
                     newOrders.add(orders);
                     masterList.add(orders);
-                    System.out.println(newOrders);
-
-
-                    System.out.println("choice isn't null and query should be complete");
 
                 }
             }     
@@ -210,8 +182,6 @@ public class HomeServlet extends HttpServlet {
             //Print DB info to page to make sure it's connected
 
             String productInfo = con.getMetaData().getDatabaseProductName();
-            System.out.println(productInfo);
-
 
             session.setAttribute("DBProductInfo", productInfo);
 
@@ -250,27 +220,10 @@ public class HomeServlet extends HttpServlet {
             }
         });
 
-        System.out.println("arrays sorted");
-
-
-        // Collections.sort(custOrders, new Comparator<OrderInfo>() {
-        //     @Override
-        //     public int compare(OrderInfo o1, OrderInfo o2) {
-        //         return o1.getOrderDate().compareTo(o2.getOrderDate());
-        //     }
-        // });
-
-
         session.setAttribute("cooldata", newOrders);
         session.setAttribute("masterList", masterList);
 
-        //list with new query objects
-        // session.setAttribute("custOrders", custOrders);
-
         response.sendRedirect ("home.jsp");
-
-        System.out.println("everything should be set");
-
     }
 
     /**
