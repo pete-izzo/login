@@ -80,10 +80,8 @@ public class HomeServlet extends HttpServlet {
 
         //list of customers for dropdown
         ArrayList<CustomerInfo> customerList = new ArrayList<CustomerInfo>();
-
+        //order info
         ArrayList<OrderInfo> newOrders = new ArrayList<OrderInfo>();
-
-        System.out.println("before db");
 
         //Get data from derby
         try {
@@ -97,27 +95,21 @@ public class HomeServlet extends HttpServlet {
             statement = con.createStatement();
             newOrders.clear();
 
-            customerQuery = "c.cust_name" +
-                        "FROM customers c";
+            customerQuery = "SELECT * FROM customers";
 
             resultset = statement.executeQuery(customerQuery);
-
-            System.out.println("after customer query set");
-
 
             while(resultset.next()) {
 
                 /**
-                 * 
+                 * create customer list for drop down
                  */
 
                 CustomerInfo customers = new CustomerInfo();
 
-                customers.setCustomerName(rs.getString("cust_name"));
+                customers.setCustomerName(resultset.getString("cust_name"));
+
                 customerList.add(customers);
-                System.out.println("customerInfo set");
-
-
 
             }
             /**
@@ -126,7 +118,6 @@ public class HomeServlet extends HttpServlet {
              * address in memory. Which it isn't.
              */
             if (choice == null || choice.equals("1")) {
-                System.out.println("choice = null");
 
                 /**
                  * The Query
@@ -139,8 +130,6 @@ public class HomeServlet extends HttpServlet {
                 " WHERE o.cust_id = c.cust_id";
 
                 rs = stmt.executeQuery(sql);
-                System.out.println("rs set");
-
 
                 while(rs.next()) {
 
@@ -158,17 +147,10 @@ public class HomeServlet extends HttpServlet {
     
                     orders.setDescription(rs.getString("order_desc"));              
     
-                    newOrders.add(orders);
-                    System.out.println("new order set");
-
-
-    
-                    }
+                    newOrders.add(orders);    
+                }
 
             } if(choice != null) {
-
-                System.out.println("choice isn't null");
-
 
                 sql = "SELECT o.*, c.cust_name" +
                 " FROM orders o, customers c" +
@@ -177,9 +159,6 @@ public class HomeServlet extends HttpServlet {
                 PreparedStatement preparedStatement = con.prepareStatement(sql);
                 preparedStatement.setString(1, choice);
                 rs = preparedStatement.executeQuery();
-
-                
-                
 
                 while(rs.next()) {
     
@@ -197,8 +176,6 @@ public class HomeServlet extends HttpServlet {
 
                 }
             }     
-            
-
             //Print DB info to page to make sure it's connected
 
             String productInfo = con.getMetaData().getDatabaseProductName();
@@ -206,20 +183,16 @@ public class HomeServlet extends HttpServlet {
             session.setAttribute("DBProductInfo", productInfo);
 
         } catch (NamingException ex) {
-            System.out.println("catch");
-
             ex.printStackTrace();
         } catch (SQLException ex) {
             ex.printStackTrace();
         } finally {
             try {
-                System.out.println("finally");
                 rs.close();
                 resultset.close();
                 stmt.close();
                 con.close();
                 ctx.close();
-                System.out.println("everything closed");
 
             }catch (SQLException error) {
                 error.printStackTrace();
