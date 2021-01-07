@@ -76,13 +76,14 @@ public class HomeServlet extends HttpServlet {
         ResultSet rs = null;
         ResultSet resultset = null;
         String sql;
+        String customerQuery;
 
-        //Master list created so you can always query every customer later
-        ArrayList<OrderInfo> masterList = new ArrayList<OrderInfo>();
+        //list of customers for dropdown
+        ArrayList<CustomerInfo> customerList = new ArrayList<CustomerInfo>();
 
         ArrayList<OrderInfo> newOrders = new ArrayList<OrderInfo>();
 
-        ArrayList<OrderInfo> custOrders = new ArrayList<OrderInfo>();
+        System.out.println("before db");
 
         //Get data from derby
         try {
@@ -96,17 +97,37 @@ public class HomeServlet extends HttpServlet {
             statement = con.createStatement();
             newOrders.clear();
 
-            /**
-            * New Query
-            * queries and displays info based on dropdown selection
-            */
+            customerQuery = "c.cust_name" +
+                        "FROM customers c";
 
+            resultset = statement.executeQuery(customerQuery);
+
+            System.out.println("after customer query set");
+
+
+            while(resultset.next()) {
+
+                /**
+                 * 
+                 */
+
+                CustomerInfo customers = new CustomerInfo();
+
+                customers.setCustomerName(rs.getString("cust_name"));
+                customerList.add(customers);
+                System.out.println("customerInfo set");
+
+
+
+            }
             /**
              * Need to use ".equals()" here because
              * simply using "==" means the value is in the same
              * address in memory. Which it isn't.
              */
             if (choice == null || choice.equals("1")) {
+                System.out.println("choice = null");
+
                 /**
                  * The Query
                  * connects both tables at cust_id so customers names 
@@ -118,7 +139,8 @@ public class HomeServlet extends HttpServlet {
                 " WHERE o.cust_id = c.cust_id";
 
                 rs = stmt.executeQuery(sql);
-                System.out.println(choice);
+                System.out.println("rs set");
+
 
                 while(rs.next()) {
 
@@ -137,12 +159,16 @@ public class HomeServlet extends HttpServlet {
                     orders.setDescription(rs.getString("order_desc"));              
     
                     newOrders.add(orders);
-                    masterList.add(orders);
+                    System.out.println("new order set");
+
 
     
                     }
 
             } if(choice != null) {
+
+                System.out.println("choice isn't null");
+
 
                 sql = "SELECT o.*, c.cust_name" +
                 " FROM orders o, customers c" +
@@ -168,7 +194,6 @@ public class HomeServlet extends HttpServlet {
                     orders.setDescription(rs.getString("order_desc"));              
     
                     newOrders.add(orders);
-                    masterList.add(orders);
 
                 }
             }     
@@ -181,16 +206,21 @@ public class HomeServlet extends HttpServlet {
             session.setAttribute("DBProductInfo", productInfo);
 
         } catch (NamingException ex) {
+            System.out.println("catch");
 
             ex.printStackTrace();
         } catch (SQLException ex) {
             ex.printStackTrace();
         } finally {
             try {
+                System.out.println("finally");
                 rs.close();
+                resultset.close();
                 stmt.close();
                 con.close();
                 ctx.close();
+                System.out.println("everything closed");
+
             }catch (SQLException error) {
                 error.printStackTrace();
             }catch (NamingException error) {
@@ -208,15 +238,8 @@ public class HomeServlet extends HttpServlet {
             }
         });
 
-        Collections.sort(masterList, new Comparator<OrderInfo>() {
-            @Override
-            public int compare(OrderInfo o1, OrderInfo o2) {
-                return o1.getOrderDate().compareTo(o2.getOrderDate());
-            }
-        });
-
         session.setAttribute("cooldata", newOrders);
-        session.setAttribute("masterList", masterList);
+        session.setAttribute("customerList", customerList);
 
         response.sendRedirect ("home.jsp");
     }

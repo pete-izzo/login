@@ -43,7 +43,7 @@
           <select name="dropDown">
 
             <option value="1">All Orders</option>
-            <c:forEach items="${masterList}" var="items">
+            <c:forEach items="${customerList}" var="items">
               <option value="${items.customerName}">${items.customerName}</option>
             </c:forEach>
           </select>
