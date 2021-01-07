@@ -94,6 +94,8 @@ public class HomeServlet extends HttpServlet {
 
             stmt = con.createStatement();
             statement = con.createStatement();
+            newOrders.clear();
+
             /**
             * New Query
             * queries and displays info based on dropdown selection
@@ -104,7 +106,7 @@ public class HomeServlet extends HttpServlet {
              * simply using "==" means the value is in the same
              * address in memory. Which it isn't.
              */
-            if (choice == null) {
+            if (choice == null || choice.equals("1")) {
                 /**
                  * The Query
                  * connects both tables at cust_id so customers names 
@@ -116,6 +118,7 @@ public class HomeServlet extends HttpServlet {
                 " WHERE o.cust_id = c.cust_id";
 
                 rs = stmt.executeQuery(sql);
+                System.out.println(choice);
 
                 while(rs.next()) {
 
@@ -140,24 +143,16 @@ public class HomeServlet extends HttpServlet {
                     }
 
             } if(choice != null) {
-                newOrders.clear();
 
-                if (choice.equals("1")){    
-                    sql = "SELECT o.*, c.cust_name" +
-                    " FROM orders o, customers c" +
-                    " WHERE o.cust_id = c.cust_id";
-                    rs = statement.executeQuery(sql);
+                sql = "SELECT o.*, c.cust_name" +
+                " FROM orders o, customers c" +
+                " WHERE o.cust_id = c.cust_id" +
+                " AND c.cust_name = ?";
+                PreparedStatement preparedStatement = con.prepareStatement(sql);
+                preparedStatement.setString(1, choice);
+                rs = preparedStatement.executeQuery();
 
-                } else{
-                    sql = "SELECT o.*, c.cust_name" +
-                    " FROM orders o, customers c" +
-                    " WHERE o.cust_id = c.cust_id" +
-                    " AND c.cust_name = ?";
-                    PreparedStatement preparedStatement = con.prepareStatement(sql);
-                    preparedStatement.setString(1, choice);
-                    rs = preparedStatement.executeQuery();
-
-                }
+                
                 
 
                 while(rs.next()) {

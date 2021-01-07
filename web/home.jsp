@@ -80,21 +80,7 @@
 
                       <td>${item.description}</td>
                   </tr>
-                </c:forEach>
-
-                <c:forEach items="${custOrders}" var="item">
-                  <tr>
-
-                      <td>${item.orderID}</td>
-                  
-                      <td>${item.customerName}</td>
-
-                      <td>${item.orderDate}</td>
-
-                      <td>${item.description}</td>
-                  </tr>
-                </c:forEach>
-                
+                </c:forEach>                
 
             </tbody>
         </table>  
