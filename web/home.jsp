@@ -17,9 +17,6 @@
     <head>
       <title>Welcome Home</title>  
 
-      <!--JQUERY NEEDED TO UPDATE PAGE DYNAMICALLY-->
-      <script src="http://code.jquery.com/jquery-latest.min.js"></script>
-
     </head>
 
     <%
@@ -87,21 +84,9 @@
 
 
         <br>
-        <br>
-        <form action="HomeServlet" method="POST">
-
-          <strong>New Order</strong>
-          <br>
-          <input type="text" required placeholder="Customer Name" name="customer_name" id="customer_name"
-          >
-          <br>
-          <input type="text" required placeholder="What are you ordering?" name="order_description" id="order_description">
-          <br>
-          <br>
-          
-          <button type="submit" value="Submit" name="newOrder">Submit New Order</button>
+        <br>          
+        <a href="./OrderEdit.jsp"><button>Submit New Order</button></a>
   
-        </form>
       </body>
 
 
