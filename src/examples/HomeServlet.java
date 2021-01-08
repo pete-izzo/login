@@ -131,26 +131,7 @@ public class HomeServlet extends HttpServlet {
 
                 rs = stmt.executeQuery(sql);
 
-                while(rs.next()) {
-
-                    /**Creates new Order object
-                     * sets all the necessary data from the query and
-                     * adds each object to the "newOrders" array list
-                     */
-                    OrderInfo orders = new OrderInfo();
-    
-                    orders.setOrderID(rs.getInt("order_id"));
-    
-                    orders.setCustomerName(rs.getString("cust_name"));
-                    
-                    orders.setOrderDate(rs.getDate("order_date"));
-    
-                    orders.setDescription(rs.getString("order_desc"));              
-    
-                    newOrders.add(orders);    
-                }
-
-            } if(choice != null) {
+            } else {
 
                 sql = "SELECT o.*, c.cust_name" +
                 " FROM orders o, customers c" +
@@ -160,22 +141,24 @@ public class HomeServlet extends HttpServlet {
                 preparedStatement.setString(1, choice);
                 rs = preparedStatement.executeQuery();
 
-                while(rs.next()) {
+            }
+            
+            while(rs.next()) {
     
-                    OrderInfo orders = new OrderInfo();
-    
-                    orders.setOrderID(rs.getInt("order_id"));
-    
-                    orders.setCustomerName(rs.getString("cust_name"));
-                    
-                    orders.setOrderDate(rs.getDate("order_date"));
-    
-                    orders.setDescription(rs.getString("order_desc"));              
-    
-                    newOrders.add(orders);
+                OrderInfo orders = new OrderInfo();
 
-                }
-            }     
+                orders.setOrderID(rs.getInt("order_id"));
+
+                orders.setCustomerName(rs.getString("cust_name"));
+                
+                orders.setOrderDate(rs.getDate("order_date"));
+
+                orders.setDescription(rs.getString("order_desc"));              
+
+                newOrders.add(orders);
+
+            }
+
             //Print DB info to page to make sure it's connected
 
             String productInfo = con.getMetaData().getDatabaseProductName();

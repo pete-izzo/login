@@ -31,6 +31,7 @@ insert into users(userid, passwd_digest) values ('Ranch', 'dressing');
 insert into customers(cust_id, cust_name) values (4, 'Casey Ryback');
 insert into orders(order_id, cust_id, order_date, order_desc) values (5, 4, { d '1997-01-23' }, 'A Playstation');
 
+--new donny
 insert into customers(cust_id, cust_name) values (5, 'Donny');
 insert into orders(order_id, cust_id, order_date, order_desc) values (6, 5, { d '2001-03-25' }, 'A Garden Gnome');
 insert into orders(order_id, cust_id, order_date, order_desc) values (7, 5, { d '2011-04-03' }, 'A boat');
