@@ -84,6 +84,24 @@
 
             </tbody>
         </table>  
+
+
+        <br>
+        <br>
+        <form action="HomeServlet" method="POST">
+
+          <strong>New Order</strong>
+          <br>
+          <input type="text" required placeholder="Customer Name" name="customer_name" id="customer_name"
+          >
+          <br>
+          <input type="text" required placeholder="What are you ordering?" name="order_description" id="order_description">
+          <br>
+          <br>
+          
+          <button type="submit" value="Submit">Submit New Order</button>
+  
+        </form>
       </body>
 
 

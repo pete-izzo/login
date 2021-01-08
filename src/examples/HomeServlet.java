@@ -52,12 +52,18 @@ public class HomeServlet extends HttpServlet {
         // Dropdown choice
         String choice =  request.getParameter("dropDown");
 
+        String insertCustomerName = request.getParameter("customer_name");
+        String insertOrderDescription = request.getParameter("order_description");
+
         /**
          * New Query
          * queries and displays info based on dropdown selection
          */
 
         String newQuery = null;
+
+        String addOrder = null;
+        String addCustomer = null;
 
         /**
          * /////////////
@@ -73,8 +79,10 @@ public class HomeServlet extends HttpServlet {
         Connection con = null;
         Statement stmt = null;
         Statement statement = null;
+        Statement addOrderStatement = null;
         ResultSet rs = null;
         ResultSet resultset = null;
+        ResultSet addOrderResult = null;
         String sql;
         String customerQuery;
 
@@ -95,9 +103,34 @@ public class HomeServlet extends HttpServlet {
             statement = con.createStatement();
             newOrders.clear();
 
+
+            // Add new order to DB
+            try {
+
+                addCustomer =  "INSERT INTO customers (cust_name) VALUES (?)";
+                PreparedStatement insertCustomer = con.prepareStatement(addCustomer);
+                insertCustomer.setString(1, insertCustomerName);
+
+                addOrder =  "INSERT INTO orders (cust_id, order_date, order_desc)" +
+                            " VALUES(LAST_INSERT_ID(), CURRENT_DATE, ?)";
+                PreparedStatement insertOrder = con.prepareStatement(addOrder);
+                insertOrder.setString(1, insertOrderDescription);
+
+
+                insertCustomer.executeUpdate();
+                insertCustomer.close();
+                insertOrder.executeUpdate();
+                insertOrder.close();
+
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+            // END OF ADDING NEW ORDER
+
             customerQuery = "SELECT * FROM customers";
 
             resultset = statement.executeQuery(customerQuery);
+
 
             while(resultset.next()) {
 

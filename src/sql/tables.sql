@@ -4,11 +4,11 @@ CREATE TABLE users(
     passwd_digest varchar(128)
     );
 CREATE TABLE customers(
-    cust_id int not null primary key(START WITH 1, INCREMENT BY 1), 
+    cust_id int not null GENERATED ALWAYS AS IDENTITY primary key(START WITH 1, INCREMENT BY 1), 
     cust_name varchar(128)
     );
 CREATE TABLE orders(
-    order_id int not null primary key, 
+    order_id int not null GENERATED ALWAYS AS IDENTITY primary key(START WITH 1, INCREMENT BY 1), 
     foreign key(cust_id) references customers(cust_id), 
     order_date date(yyyy-mm-dd), 
     order_desc varchar(128)
