@@ -99,7 +99,7 @@
           <br>
           <br>
           
-          <button type="submit" value="Submit">Submit New Order</button>
+          <button type="submit" value="Submit" name="newOrder">Submit New Order</button>
   
         </form>
       </body>
