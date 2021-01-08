@@ -108,6 +108,7 @@ public class HomeServlet extends HttpServlet {
                 CustomerInfo customers = new CustomerInfo();
 
                 customers.setCustomerName(resultset.getString("cust_name"));
+                customers.setCustomerID(resultset.getInt("cust_id"));
 
                 customerList.add(customers);
 
@@ -117,7 +118,7 @@ public class HomeServlet extends HttpServlet {
              * simply using "==" means the value is in the same
              * address in memory. Which it isn't.
              */
-            if (choice == null || choice.equals("1")) {
+            if (choice == null || choice.equals("all")) {
 
                 /**
                  * The Query
@@ -136,7 +137,7 @@ public class HomeServlet extends HttpServlet {
                 sql = "SELECT o.*, c.cust_name" +
                 " FROM orders o, customers c" +
                 " WHERE o.cust_id = c.cust_id" +
-                " AND c.cust_name = ?";
+                " AND c.cust_id = ?";
                 PreparedStatement preparedStatement = con.prepareStatement(sql);
                 preparedStatement.setString(1, choice);
                 rs = preparedStatement.executeQuery();
