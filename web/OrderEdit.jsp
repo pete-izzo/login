@@ -33,7 +33,7 @@
     
         <h1>Welcome <c:out value="${name}" /></h1>
   
-        <h2>Add an order here!</h2>
+        <h2>Add an order for...</h2>
 
         <form action="OrderServlet" method="post">
             <select name="customerChoice">

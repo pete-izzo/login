@@ -16,7 +16,6 @@ import java.lang.Object;
 import java.util.Collections;
 import static java.util.Comparator.comparing;
 import java.io.*;
-import java.util.*;
 import java.nio.charset.StandardCharsets;
 import java.sql.*;
 import java.sql.Connection;
@@ -41,12 +40,16 @@ public class OrderServlet extends HttpServlet {
 
         
         String customer = request.getParameter("customerChoice");
+        int custID = Integer.parseInt(customer);
         String orderDate = request.getParameter("order_date");
+        Date date = java.sql.Date.valueOf(orderDate);
         String description = request.getParameter("orderDescription");
 
         System.out.println(customer);
         System.out.println(orderDate);
         System.out.println(description);
+        System.out.println(date);
+
 
 
 
@@ -56,7 +59,6 @@ public class OrderServlet extends HttpServlet {
          * /////////////
          */
 
-         /*
         String dbURL ="java:comp/env/jdbc/NewDBTest";
 
         String driver = "org.apache.derby.jdbc.EmbeddedDriver";
@@ -64,20 +66,12 @@ public class OrderServlet extends HttpServlet {
         Context ctx = null;
         Connection con = null;
         Statement stmt = null;
-        Statement addOrderStatement = null;
         ResultSet rs = null;
         ResultSet resultset = null;
-        ResultSet addOrderResult = null;
-        String sql;
-        String customerQuery;
+        String addOrder = null;
 
-        //list of customers for dropdown
-        ArrayList<CustomerInfo> customerList = new ArrayList<CustomerInfo>();
-        //order info
-        ArrayList<OrderInfo> newOrders = new ArrayList<OrderInfo>();
-
-        //Get data from derby
         try {
+            System.out.println("start try-catch");
 
             ctx = new InitialContext();
             DataSource ds = (DataSource) ctx.lookup("java:comp/env/jdbc/firstDB");
@@ -85,26 +79,25 @@ public class OrderServlet extends HttpServlet {
             con = ds.getConnection();
 
             stmt = con.createStatement();
-
-
             // Add new order to DB
-            try {
+
+            addOrder =  "INSERT INTO orders (cust_id, order_date, order_desc) VALUES (?, CURRENT_DATE, ?)";
+            PreparedStatement insertOrder = con.prepareStatement(addOrder);
+            System.out.println("prepared stmt created");
+
+            insertOrder.setInt(1, custID);
+            System.out.println("cust ID set");
+
+            //insertOrder.setDate(2, java.sql.Date.valueOf(orderDate));
+            System.out.println("order date set");
+
+            insertOrder.setString(2, description);
+            System.out.println("description set");
+
+            insertOrder.executeUpdate();
+            insertOrder.close();
 
 
-                addOrder =  "INSERT INTO orders (cust_id, order_date, order_desc)" +
-                            " VALUES(LAST_INSERT_ID(), CURRENT_DATE, ?)";
-                PreparedStatement insertOrder = con.prepareStatement(addOrder);
-                insertOrder.setString(1, insertOrderDescription);
-
-
-                insertCustomer.executeUpdate();
-                insertCustomer.close();
-                insertOrder.executeUpdate();
-                insertOrder.close();
-
-            } catch (SQLException ex) {
-                ex.printStackTrace();
-            }
             // END OF ADDING NEW ORDER
 
         } catch (NamingException ex) {
@@ -113,8 +106,6 @@ public class OrderServlet extends HttpServlet {
             ex.printStackTrace();
         } finally {
             try {
-                rs.close();
-                resultset.close();
                 stmt.close();
                 con.close();
                 ctx.close();
@@ -125,8 +116,6 @@ public class OrderServlet extends HttpServlet {
                 error.printStackTrace();
             }
         }
-        
-        */
 
 
         response.sendRedirect ("./home.jsp");
