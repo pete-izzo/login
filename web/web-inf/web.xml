@@ -33,6 +33,17 @@
         <url-pattern>/HomeServlet</url-pattern>
     </servlet-mapping>
 
+    <servlet>
+        <servlet-name>OrderServlet</servlet-name>
+        <servlet-class>examples.OrderServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>OrderServlet</servlet-name>
+        <url-pattern>/OrderServlet</url-pattern>
+    </servlet-mapping>
+
+
     <!-- <filter>  
         <filter-name>f1</filter-name>  
         <filter-class>LoginFilter</filter-class>  

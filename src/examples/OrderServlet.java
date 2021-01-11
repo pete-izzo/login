@@ -34,11 +34,11 @@ import java.util.logging.Logger;
  
 // Class of OrderServlet/
 public class OrderServlet extends HttpServlet {
-    protected void doPOST(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
         
 
-        response.sendRedirect ("./OrderEdit.jsp");
+        response.sendRedirect ("./home.jsp");
 
 
     }
