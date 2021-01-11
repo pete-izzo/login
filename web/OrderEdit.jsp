@@ -35,6 +35,19 @@
   
         <h2>Add an order here!</h2>
 
+        <form action="OrderServlet" method="post">
+            <select name="customerChoice">
+                <c:forEach items="${customerList}" var="items">
+                    <option value="${items.customerID}">${items.customerName} ${items.customerID}</option>
+                </c:forEach>
+            </select>
+
+            <input type="submit" value="Submit" />
+
+
+        </form>
+
+
   
       </body>
 
