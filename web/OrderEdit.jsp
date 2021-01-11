@@ -42,8 +42,10 @@
                 </c:forEach>
             </select>
 
+            <br>
+            <br>
             <label for="date">Order Date: </label><br>
-            <input type="date" required placeholder="2019-12-25" name="order_date" id="order_date">
+            <input type="date" required name="order_date" id="order_date">
             <br>
             <label for="description">Order Description:</label><br>
             <input type="text" required placeholder="What was ordered?" name="orderDescription" id="orderDescription">
