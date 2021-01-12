@@ -80,7 +80,7 @@ public class OrderServlet extends HttpServlet {
             System.out.println("order id set to default");
 
 
-            String addOrder =  "INSERT INTO orders (order_id, cust_id, order_date, order_desc) VALUES (default, ?, CURRENT_DATE, ?)";
+            String addOrder =  "INSERT INTO orders (cust_id, order_date, order_desc) VALUES (?, CURRENT_DATE, ?)";
             PreparedStatement insertOrder = con.prepareStatement(addOrder);
             System.out.println("prepared stmt created");
 
@@ -97,6 +97,7 @@ public class OrderServlet extends HttpServlet {
             insertOrder.executeUpdate();
             insertOrder.close();
 
+            System.out.println("closed");
 
             // END OF ADDING NEW ORDER
 
