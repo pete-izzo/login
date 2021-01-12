@@ -66,9 +66,6 @@ public class OrderServlet extends HttpServlet {
         Context ctx = null;
         Connection con = null;
         Statement stmt = null;
-        ResultSet rs = null;
-        ResultSet resultset = null;
-        String addOrder = null;
 
         try {
             System.out.println("start try-catch");
@@ -80,14 +77,17 @@ public class OrderServlet extends HttpServlet {
 
             stmt = con.createStatement();
             // Add new order to DB
+            System.out.println("order id set to default");
 
-            addOrder =  "INSERT INTO orders (cust_id, order_date, order_desc) VALUES (?, CURRENT_DATE, ?)";
+
+            String addOrder =  "INSERT INTO orders (order_id, cust_id, order_date, order_desc) VALUES (default, ?, CURRENT_DATE, ?)";
             PreparedStatement insertOrder = con.prepareStatement(addOrder);
             System.out.println("prepared stmt created");
 
             insertOrder.setInt(1, custID);
             System.out.println("cust ID set");
 
+            //This when formatted into a prepared stmt isnt working
             //insertOrder.setDate(2, java.sql.Date.valueOf(orderDate));
             System.out.println("order date set");
 
