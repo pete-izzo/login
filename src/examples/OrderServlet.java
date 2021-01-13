@@ -66,6 +66,9 @@ public class OrderServlet extends HttpServlet {
         Context ctx = null;
         Connection con = null;
         Statement stmt = null;
+        ResultSet rs = null;
+        String addOrder = null;
+
 
         try {
             System.out.println("start try-catch");
@@ -77,9 +80,22 @@ public class OrderServlet extends HttpServlet {
 
             stmt = con.createStatement();
             // Add new order to DB
-            System.out.println("order id set to default");
+            System.out.println("default");
 
+            addOrder =  "INSERT INTO orders " +
+                        "VALUES " +
+                        " (DEFAULT, " + custID + ", CURRENT_DATE, '" + description + "')";
+            System.out.println(addOrder);
 
+            stmt.execute(addOrder);
+
+            /**
+             * 
+             * //////////////////
+             * PREPARED STATEMENT
+             * //////////////////
+             * 
+             * 
             String addOrder =  "INSERT INTO orders (cust_id, order_date, order_desc) VALUES (?, CURRENT_DATE, ?)";
             PreparedStatement insertOrder = con.prepareStatement(addOrder);
             System.out.println("prepared stmt created");
@@ -98,6 +114,7 @@ public class OrderServlet extends HttpServlet {
             insertOrder.close();
 
             System.out.println("closed");
+             */
 
             // END OF ADDING NEW ORDER
 
@@ -119,7 +136,7 @@ public class OrderServlet extends HttpServlet {
         }
 
 
-        response.sendRedirect ("./home.jsp");
+        response.sendRedirect ("HomeServlet");
 
 
     }

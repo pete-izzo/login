@@ -103,30 +103,6 @@ public class HomeServlet extends HttpServlet {
             statement = con.createStatement();
             newOrders.clear();
 
-
-            // Add new order to DB
-            try {
-
-                addCustomer =  "INSERT INTO customers (cust_name) VALUES (?)";
-                PreparedStatement insertCustomer = con.prepareStatement(addCustomer);
-                insertCustomer.setString(1, insertCustomerName);
-
-                addOrder =  "INSERT INTO orders (cust_id, order_date, order_desc)" +
-                            " VALUES(LAST_INSERT_ID(), CURRENT_DATE, ?)";
-                PreparedStatement insertOrder = con.prepareStatement(addOrder);
-                insertOrder.setString(1, insertOrderDescription);
-
-
-                insertCustomer.executeUpdate();
-                insertCustomer.close();
-                insertOrder.executeUpdate();
-                insertOrder.close();
-
-            } catch (SQLException ex) {
-                ex.printStackTrace();
-            }
-            // END OF ADDING NEW ORDER
-
             customerQuery = "SELECT * FROM customers";
 
             resultset = statement.executeQuery(customerQuery);
