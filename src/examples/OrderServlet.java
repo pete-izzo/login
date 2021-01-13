@@ -82,21 +82,21 @@ public class OrderServlet extends HttpServlet {
             // Add new order to DB
             System.out.println("default");
 
-            addOrder =  "INSERT INTO orders " +
-                        "VALUES " +
-                        " (DEFAULT, " + custID + ", CURRENT_DATE, '" + description + "')";
-            System.out.println(addOrder);
+            // addOrder =  "INSERT INTO orders " +
+            //             "VALUES " +
+            //             " (DEFAULT, " + custID + ", CURRENT_DATE, '" + description + "')";
+            // System.out.println(addOrder);
 
-            stmt.execute(addOrder);
+            // stmt.execute(addOrder);
 
             /**
-             * 
+             *  
              * //////////////////
              * PREPARED STATEMENT
              * //////////////////
              * 
-             * 
-            String addOrder =  "INSERT INTO orders (cust_id, order_date, order_desc) VALUES (?, CURRENT_DATE, ?)";
+             */
+            addOrder =  "INSERT INTO orders (cust_id, order_date, order_desc) VALUES (?, ?, ?)";
             PreparedStatement insertOrder = con.prepareStatement(addOrder);
             System.out.println("prepared stmt created");
 
@@ -104,17 +104,17 @@ public class OrderServlet extends HttpServlet {
             System.out.println("cust ID set");
 
             //This when formatted into a prepared stmt isnt working
-            //insertOrder.setDate(2, java.sql.Date.valueOf(orderDate));
+            insertOrder.setDate(2, date);
             System.out.println("order date set");
 
-            insertOrder.setString(2, description);
+            insertOrder.setString(3, description);
             System.out.println("description set");
 
             insertOrder.executeUpdate();
             insertOrder.close();
 
             System.out.println("closed");
-             */
+             
 
             // END OF ADDING NEW ORDER
 
