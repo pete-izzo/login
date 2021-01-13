@@ -19,6 +19,7 @@ import java.io.*;
 import java.util.*;
 import java.nio.charset.StandardCharsets;
 import java.sql.*;
+import java.sql.Date;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -49,11 +50,45 @@ public class HomeServlet extends HttpServlet {
 
         String isLoggedIn = (String)session.getAttribute("logged");
 
+        System.out.println("choice set");
+
         // Dropdown choice
         String choice =  request.getParameter("dropDown");
 
         String insertCustomerName = request.getParameter("customer_name");
         String insertOrderDescription = request.getParameter("order_description");
+
+        System.out.println("set edit variables");
+
+        // Start Order Editing Variables
+        String str = request.getParameter("editDropDown");
+        System.out.println("str set");
+
+        /**
+         * 
+        /////// BELOW VARIABLE NEEDS TO BE CONVERTED ONLY WHEN THAT EDIT BUTTON IS PRESSED
+        /////// IT STARTS NULL OTHERWISE
+
+        int orderIDToEdit = Integer.parseInt(str);
+        System.out.println("converted to int");
+         */
+
+        /////// BELOW SHOULD BE PUT IN NEW IF STATEMENT - CAUSING ERRORS
+        String editCustomerName = request.getParameter("newCustomerName");
+        String newDate = request.getParameter("newOrderDate");
+        Date editDate = java.sql.Date.valueOf(newDate);
+        String newDescription = request.getParameter("newDescription");
+
+        //End Order editing variables
+
+        // Are these what they should be?
+        System.out.println(str);
+        System.out.println(editCustomerName);
+        System.out.println(editDate);
+        System.out.println(newDescription);
+
+
+
 
         /**
          * New Query
@@ -152,6 +187,16 @@ public class HomeServlet extends HttpServlet {
                 rs = preparedStatement.executeQuery();
 
             }
+
+            //////////////////////////////////////////////////
+            // ADD IF STATEMENT FOR THE ORDER EDIT 
+            //////////////////////////////////////////////////
+
+            /*
+            if(orderIDToEdit != null) {
+                // SQL UPDATE CODE HERE
+            }
+            */
             
             while(rs.next()) {
     
