@@ -45,14 +45,6 @@ public class OrderServlet extends HttpServlet {
         Date date = java.sql.Date.valueOf(orderDate);
         String description = request.getParameter("orderDescription");
 
-        System.out.println(customer);
-        System.out.println(orderDate);
-        System.out.println(description);
-        System.out.println(date);
-
-
-
-
         /**
          * /////////////
          * DB INFO
@@ -66,7 +58,6 @@ public class OrderServlet extends HttpServlet {
         Context ctx = null;
         Connection con = null;
         Statement stmt = null;
-        ResultSet rs = null;
         String addOrder = null;
 
 
@@ -80,7 +71,8 @@ public class OrderServlet extends HttpServlet {
 
             stmt = con.createStatement();
             // Add new order to DB
-            System.out.println("default");
+            // regular insert stmt
+            //works but not secure
 
             // addOrder =  "INSERT INTO orders " +
             //             "VALUES " +
@@ -93,28 +85,20 @@ public class OrderServlet extends HttpServlet {
              *  
              * //////////////////
              * PREPARED STATEMENT
+             * to insert new orders into orders
+             * table
              * //////////////////
              * 
              */
             addOrder =  "INSERT INTO orders (cust_id, order_date, order_desc) VALUES (?, ?, ?)";
             PreparedStatement insertOrder = con.prepareStatement(addOrder);
-            System.out.println("prepared stmt created");
 
             insertOrder.setInt(1, custID);
-            System.out.println("cust ID set");
-
-            //This when formatted into a prepared stmt isnt working
             insertOrder.setDate(2, date);
-            System.out.println("order date set");
-
             insertOrder.setString(3, description);
-            System.out.println("description set");
 
             insertOrder.executeUpdate();
-            insertOrder.close();
-
-            System.out.println("closed");
-             
+            insertOrder.close();             
 
             // END OF ADDING NEW ORDER
 
