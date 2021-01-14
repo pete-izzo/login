@@ -61,7 +61,7 @@ public class HomeServlet extends HttpServlet {
         System.out.println("set edit variables");
 
         // Start Order Editing Variables
-        String str = request.getParameter("editDropDown");
+        String editDropDownStr = request.getParameter("editDropDown");
         System.out.println("str set");
 
         /**
@@ -99,6 +99,7 @@ public class HomeServlet extends HttpServlet {
 
         Context ctx = null;
         Connection con = null;
+        Connection conn = null;
         Statement stmt = null;
         Statement statement = null;
         Statement editOrderStatement = null;
@@ -180,8 +181,8 @@ public class HomeServlet extends HttpServlet {
             //////////////////////////////////////////////////
 
             
-            if(str != null) {
-                int orderIDToEdit = Integer.parseInt(str);
+            if(editDropDownStr != null) {
+                int orderIDToEdit = Integer.parseInt(editDropDownStr);
                 System.out.println("converted to int");
 
                 /////// BELOW SHOULD BE PUT IN NEW IF STATEMENT - CAUSING ERRORS
@@ -191,17 +192,25 @@ public class HomeServlet extends HttpServlet {
 
 
                 // Are these what they should be?
-                System.out.println(str);
+                System.out.println(orderIDToEdit);
                 System.out.println(editDate);
                 System.out.println(newDescription);
                 
                 String updateOrder = "UPDATE orders" +
-                                     " SET order_date = '" + editDate +
-                                     "', order_desc = '" + newDescription +
-                                     "' WHERE order_id = " + orderIDToEdit;
+                                     " SET order_date = ?" +
+                                     ", order_desc = ?" +
+                                     " WHERE order_id = ?";
 
                 System.out.println(updateOrder);
-                
+
+                PreparedStatement editOrder = con.prepareStatement(updateOrder);
+                editOrder.setDate(1, editDate);
+                editOrder.setString(2, newDescription);
+                editOrder.setInt(3, orderIDToEdit);
+
+                editOrder.executeUpdate();
+                editOrder.close();
+
                 editOrderStatement = con.createStatement();
                 editOrderStatement.execute(updateOrder);
                 //End Order editing variables
