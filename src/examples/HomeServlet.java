@@ -73,19 +73,6 @@ public class HomeServlet extends HttpServlet {
         System.out.println("converted to int");
          */
 
-        /////// BELOW SHOULD BE PUT IN NEW IF STATEMENT - CAUSING ERRORS
-        String editCustomerName = request.getParameter("newCustomerName");
-        String newDate = request.getParameter("newOrderDate");
-        Date editDate = java.sql.Date.valueOf(newDate);
-        String newDescription = request.getParameter("newDescription");
-
-        //End Order editing variables
-
-        // Are these what they should be?
-        System.out.println(str);
-        System.out.println(editCustomerName);
-        System.out.println(editDate);
-        System.out.println(newDescription);
 
 
 
@@ -114,7 +101,7 @@ public class HomeServlet extends HttpServlet {
         Connection con = null;
         Statement stmt = null;
         Statement statement = null;
-        Statement addOrderStatement = null;
+        Statement editOrderStatement = null;
         ResultSet rs = null;
         ResultSet resultset = null;
         ResultSet addOrderResult = null;
@@ -189,14 +176,40 @@ public class HomeServlet extends HttpServlet {
             }
 
             //////////////////////////////////////////////////
-            // ADD IF STATEMENT FOR THE ORDER EDIT 
+            // ORDER EDIT 
             //////////////////////////////////////////////////
 
-            /*
-            if(orderIDToEdit != null) {
-                // SQL UPDATE CODE HERE
+            
+            if(str != null) {
+                int orderIDToEdit = Integer.parseInt(str);
+                System.out.println("converted to int");
+
+                /////// BELOW SHOULD BE PUT IN NEW IF STATEMENT - CAUSING ERRORS
+                String newDate = request.getParameter("newOrderDate");
+                Date editDate = java.sql.Date.valueOf(newDate);
+                String newDescription = request.getParameter("newDescription");
+
+
+                // Are these what they should be?
+                System.out.println(str);
+                System.out.println(editDate);
+                System.out.println(newDescription);
+                
+                String updateOrder = "UPDATE orders" +
+                                     " SET order_date = '" + editDate +
+                                     "', order_desc = '" + newDescription +
+                                     "' WHERE order_id = " + orderIDToEdit;
+
+                System.out.println(updateOrder);
+                
+                editOrderStatement = con.createStatement();
+                editOrderStatement.execute(updateOrder);
+                //End Order editing variables
+
+
+        
             }
-            */
+            
             
             while(rs.next()) {
     

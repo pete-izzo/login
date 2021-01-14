@@ -102,9 +102,6 @@
           </select>
 
           <br>
-          <label for="newCustomerName">Customer Name</label>
-          <input type="text" name="newCustomerName" id="customerName" required>
-          <br>
           <label for="newOrderDate">Order Date</label>
           <input type="date" name="newOrderDate" id="orderDate" required>
           <br>
