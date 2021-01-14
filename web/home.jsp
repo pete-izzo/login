@@ -76,6 +76,7 @@
                       <td>${item.orderDate}</td>
 
                       <td>${item.description}</td>
+                      <td><a href="#"><button>Edit</button></a></td>
                   </tr>
                 </c:forEach>                
 
