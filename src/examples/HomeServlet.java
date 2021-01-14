@@ -60,22 +60,8 @@ public class HomeServlet extends HttpServlet {
 
         System.out.println("set edit variables");
 
-        // Start Order Editing Variables
+        // Order Editing dropdown choice
         String editDropDownStr = request.getParameter("editDropDown");
-        System.out.println("str set");
-
-        /**
-         * 
-        /////// BELOW VARIABLE NEEDS TO BE CONVERTED ONLY WHEN THAT EDIT BUTTON IS PRESSED
-        /////// IT STARTS NULL OTHERWISE
-
-        int orderIDToEdit = Integer.parseInt(str);
-        System.out.println("converted to int");
-         */
-
-
-
-
 
         /**
          * New Query
@@ -83,9 +69,6 @@ public class HomeServlet extends HttpServlet {
          */
 
         String newQuery = null;
-
-        String addOrder = null;
-        String addCustomer = null;
 
         /**
          * /////////////
@@ -99,7 +82,6 @@ public class HomeServlet extends HttpServlet {
 
         Context ctx = null;
         Connection con = null;
-        Connection conn = null;
         Statement stmt = null;
         Statement statement = null;
         Statement editOrderStatement = null;
@@ -183,7 +165,6 @@ public class HomeServlet extends HttpServlet {
             
             if(editDropDownStr != null) {
                 int orderIDToEdit = Integer.parseInt(editDropDownStr);
-                System.out.println("converted to int");
 
                 /////// BELOW SHOULD BE PUT IN NEW IF STATEMENT - CAUSING ERRORS
                 String newDate = request.getParameter("newOrderDate");
@@ -200,8 +181,6 @@ public class HomeServlet extends HttpServlet {
                                      " SET order_date = ?" +
                                      ", order_desc = ?" +
                                      " WHERE order_id = ?";
-
-                System.out.println(updateOrder);
 
                 PreparedStatement editOrder = con.prepareStatement(updateOrder);
                 editOrder.setDate(1, editDate);
