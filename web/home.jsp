@@ -68,31 +68,38 @@
               </tr>
                 <c:forEach items="${cooldata}" var="item">
                   <tr>
+                      <form action="OrderServlet" method="POST">
 
-                      <td>${item.orderID}</td>
+                        <td>${item.orderID}</td>
                   
-                      <td>${item.customerName}</td>
+                        <td>${item.customerName}</td>
 
-                      <td>${item.orderDate}</td>
+                        <td>${item.orderDate}</td>
 
-                      <td>${item.description}</td>
-                      <td><a href="#"><button>Edit</button></a></td>
+                        <td>${item.description}</td>
+                        <input type="hidden" name="editOrderID" value="${item.orderID}">
+                        <td><input type="submit" value="Edit"/>
+
+                      </form>
+                      
                   </tr>
                 </c:forEach>                
 
             </tbody>
         </table>  
 
-
+        
         <br>
         <br>          
-        <a href="./OrderEdit.jsp"><button>Submit New Order</button></a>
+        <a href="OrderServlet"><button>Submit New Order</button></a>
         <br>
-
+        <!--
 
         <h2>To edit a previous order please select the corresponding Order ID from the dropdown</h2>
         <hr>
+        -->
         <!--Order edits-->
+        <!--
         <form action="HomeServlet" method="POST">
 
           <label for="editDropDown">Order ID</label>
@@ -109,9 +116,10 @@
           <label for="newDescription">Order Description</label>
           <input type="text" name="newDescription" id="description" required>
           <input type="submit" value="Edit a previous order">
-
+        
 
         </form>
+        -->
   
       </body>
 

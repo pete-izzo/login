@@ -32,6 +32,12 @@
       <body bgcolor=white>
     
         <h1>Welcome <c:out value="${name}" /></h1>
+
+        <c:if test="${sessionScope.editOrderIDString == null}">
+          <br>
+          <c:out value="Wow thats a big word. It's over 8 characters long"/>
+        
+        </c:if>
   
         <h2>Add an order for...</h2>
 
@@ -54,7 +60,7 @@
       
 
             <input type="submit" value="Submit" />
-            <a href="./home.jsp">Back Home</a>
+            <a href="HomeServlet">Back Home</a>
 
 
         </form>

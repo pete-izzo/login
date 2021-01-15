@@ -37,13 +37,26 @@ public class OrderServlet extends HttpServlet {
 
 
         PrintWriter out = response.getWriter();
+        HttpSession session = request.getSession(false);
 
         
         String customer = request.getParameter("customerChoice");
-        int custID = Integer.parseInt(customer);
-        String orderDate = request.getParameter("order_date");
-        Date date = java.sql.Date.valueOf(orderDate);
-        String description = request.getParameter("orderDescription");
+        session.setAttribute("customerChoice", customer);
+
+        System.out.println("customerChoice: "+ customer);
+
+        String editOrderIDString = request.getParameter("editOrderID");
+        session.setAttribute("editOrderIDString", editOrderIDString);
+
+        System.out.println("EditOderIDString: " + editOrderIDString);
+
+        if (editOrderIDString != null){
+            int editOrderID = Integer.parseInt(editOrderIDString);
+            System.out.println(editOrderID);
+    
+        } else {
+            System.out.println(editOrderIDString);
+        }
 
         /**
          * /////////////
@@ -60,68 +73,96 @@ public class OrderServlet extends HttpServlet {
         Statement stmt = null;
         String addOrder = null;
 
+        if(customer != null) {
+            int custID = Integer.parseInt(customer);
+            String orderDate = request.getParameter("order_date");
+            Date date = java.sql.Date.valueOf(orderDate);
+            String description = request.getParameter("orderDescription");
+    
 
-        try {
-            System.out.println("start try-catch");
-
-            ctx = new InitialContext();
-            DataSource ds = (DataSource) ctx.lookup("java:comp/env/jdbc/firstDB");
-
-            con = ds.getConnection();
-
-            stmt = con.createStatement();
-            // Add new order to DB
-            // regular insert stmt
-            //works but not secure
-
-            // addOrder =  "INSERT INTO orders " +
-            //             "VALUES " +
-            //             " (DEFAULT, " + custID + ", CURRENT_DATE, '" + description + "')";
-            // System.out.println(addOrder);
-
-            // stmt.execute(addOrder);
-
-            /**
-             *  
-             * //////////////////
-             * PREPARED STATEMENT
-             * to insert new orders into orders
-             * table
-             * //////////////////
-             * 
-             */
-            addOrder =  "INSERT INTO orders (cust_id, order_date, order_desc) VALUES (?, ?, ?)";
-            PreparedStatement insertOrder = con.prepareStatement(addOrder);
-
-            insertOrder.setInt(1, custID);
-            insertOrder.setDate(2, date);
-            insertOrder.setString(3, description);
-
-            insertOrder.executeUpdate();
-            insertOrder.close();             
-
-            // END OF ADDING NEW ORDER
-
-        } catch (NamingException ex) {
-            ex.printStackTrace();
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-        } finally {
             try {
-                stmt.close();
-                con.close();
-                ctx.close();
-
-            }catch (SQLException error) {
-                error.printStackTrace();
-            }catch (NamingException error) {
-                error.printStackTrace();
+                System.out.println("start try-catch");
+    
+                ctx = new InitialContext();
+                DataSource ds = (DataSource) ctx.lookup("java:comp/env/jdbc/firstDB");
+    
+                con = ds.getConnection();
+    
+                stmt = con.createStatement();
+                // Add new order to DB
+                // regular insert stmt
+                //works but not secure
+    
+                // addOrder =  "INSERT INTO orders " +
+                //             "VALUES " +
+                //             " (DEFAULT, " + custID + ", CURRENT_DATE, '" + description + "')";
+                // System.out.println(addOrder);
+    
+                // stmt.execute(addOrder);
+    
+                /**
+                 *  
+                 * //////////////////
+                 * PREPARED STATEMENT
+                 * to insert new orders into orders
+                 * table
+                 * //////////////////
+                 * 
+                 */
+                addOrder =  "INSERT INTO orders (cust_id, order_date, order_desc) VALUES (?, ?, ?)";
+                PreparedStatement insertOrder = con.prepareStatement(addOrder);
+    
+                insertOrder.setInt(1, custID);
+                insertOrder.setDate(2, date);
+                insertOrder.setString(3, description);
+    
+                insertOrder.executeUpdate();
+                insertOrder.close();             
+    
+                // END OF ADDING NEW ORDER
+    
+            } catch (NamingException ex) {
+                ex.printStackTrace();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            } finally {
+                try {
+                    stmt.close();
+                    con.close();
+                    ctx.close();
+    
+                }catch (SQLException error) {
+                    error.printStackTrace();
+                }catch (NamingException error) {
+                    error.printStackTrace();
+                }
             }
+    
+
         }
 
 
-        response.sendRedirect ("HomeServlet");
+        response.sendRedirect ("OrderEdit.jsp");
 
 
+    }
+
+    /**
+     * //////////////////////////
+     * Get method for Order Edits
+     * //////////////////////////
+     */
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+
+        HttpSession session = request.getSession(false);
+        String editOrderIDString = request.getParameter("editOrderID");
+        session.setAttribute("editOrderIDString", editOrderIDString);
+        System.out.println("EditOderIDString: " + editOrderIDString);
+
+        response.sendRedirect ("OrderEdit.jsp");
+
+        // //refreshes current page instead of sending elsewhere
+        // response.setHeader("Refresh", "0; URL=/login/home.jsp"); 
     }
 }

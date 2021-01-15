@@ -50,15 +50,11 @@ public class HomeServlet extends HttpServlet {
 
         String isLoggedIn = (String)session.getAttribute("logged");
 
-        System.out.println("choice set");
-
         // Dropdown choice
         String choice =  request.getParameter("dropDown");
 
         String insertCustomerName = request.getParameter("customer_name");
         String insertOrderDescription = request.getParameter("order_description");
-
-        System.out.println("set edit variables");
 
         // Order Editing dropdown choice
         String editDropDownStr = request.getParameter("editDropDown");
