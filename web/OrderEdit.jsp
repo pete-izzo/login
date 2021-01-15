@@ -60,7 +60,7 @@
   
         </c:if>
 
-
+        <!--ORDER EDIT-->
         <c:if test="${sessionScope.editOrderIDString != null}">
 
             <table>
@@ -78,20 +78,18 @@
                   <th><c:out value="${newDate}"/></th>
                   <th><c:out value="${editDescription}"/></th>
                 </tr>
+                    <tr>
+                        <form action="#" method="POST">
 
-                <tr>
-                    <form action="OrderServlet" method="POST">
+                          <td></td>
+                          <td></td>
+                          <td><input type="date" name="newOrderDate" id="orderDate" required></td>
+                          <td><input type="text" name="editOrderDescription" value="${item.description}"></td>
+                          <td><input type="submit" value="Save"/></td>
 
-                      <td></td>
-                      <td></td>
-                      <td><input type="date" name="newOrderDate" id="orderDate" required></td>
-                      <td><input type="text" name="newDescription" id="description" required></td>
-
-                      <td><input type="submit" value="Save"/>
-
-                    </form>
-                    
-                </tr>
+                        </form>
+                        
+                    </tr>
 
               </tbody>
             </table>  

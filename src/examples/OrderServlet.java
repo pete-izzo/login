@@ -43,10 +43,9 @@ public class OrderServlet extends HttpServlet {
 
         System.out.println("customerChoice: "+ customer);
 
-        String editOrderIDString = request.getParameter("editOrderID");
-        session.setAttribute("editOrderIDString", editOrderIDString);
+        String newDate = request.getParameter("editOrderDate");
 
-        System.out.println("EditOderIDString: " + editOrderIDString);
+
 
         /**
          * /////////////
@@ -76,18 +75,20 @@ public class OrderServlet extends HttpServlet {
             /////////////////////////////////
             // START ORDER EDIT CODE
             /////////////////////////////////
-            if (editOrderIDString != null){
-                int editOrderID = Integer.parseInt(editOrderIDString);
-                String newDate = request.getParameter("editOrderDate");
-                Date editDate = java.sql.Date.valueOf(newDate);
-                String custName = request.getParameter("editCustomerName");
-                String editDescription = request.getParameter("editOrderDescription");
+
+
+            // if (newDate != null){
+            //     int editOrderID = Integer.parseInt(editOrderIDString);
+            //     String newDate = request.getParameter("editOrderDate");
+            //     Date editDate = java.sql.Date.valueOf(newDate);
+            //     String custName = request.getParameter("editCustomerName");
+            //     String editDescription = request.getParameter("editOrderDescription");
 
                 //
-                session.setAttribute("custName", custName);
-                session.setAttribute("editOrderID", editOrderID);
-                session.setAttribute("newDate", newDate);
-                session.setAttribute("editDescription", editDescription);
+                // session.setAttribute("custName", custName);
+                // session.setAttribute("editOrderID", editOrderID);
+                // session.setAttribute("newDate", newDate);
+                // session.setAttribute("editDescription", editDescription);
 
                 // String updateOrder = "UPDATE orders" +
                 // " SET order_date = ?" +
@@ -106,13 +107,15 @@ public class OrderServlet extends HttpServlet {
                 // editOrderStatement.execute(updateOrder);
 
 
-                System.out.println(editOrderID);
-                System.out.println(editDate);
-                System.out.println(editDescription);
+            //     System.out.println(editOrderID);
+            //     System.out.println(editDate);
+            //     System.out.println(editDescription);
+
+
         
-            } else {
-                System.out.println(editOrderIDString);
-            }
+            // } else {
+            //     System.out.println(editOrderIDString);
+            // }
 
             /////////////////////////////////////
             // ADD NEW ORDER
@@ -194,9 +197,29 @@ public class OrderServlet extends HttpServlet {
             throws ServletException, IOException {
 
         HttpSession session = request.getSession(false);
+
         String editOrderIDString = request.getParameter("editOrderID");
         session.setAttribute("editOrderIDString", editOrderIDString);
         System.out.println("EditOderIDString: " + editOrderIDString);
+
+        int editOrderID = Integer.parseInt(editOrderIDString);
+        String newDate = request.getParameter("editOrderDate");
+        Date editDate = java.sql.Date.valueOf(newDate);
+        String custName = request.getParameter("editCustomerName");
+        String editDescription = request.getParameter("editOrderDescription");
+
+        
+        session.setAttribute("custName", custName);
+        session.setAttribute("editOrderID", editOrderID);
+        session.setAttribute("newDate", newDate);
+        session.setAttribute("editDescription", editDescription);
+
+        System.out.println("EditOderIDString: " + custName);
+        System.out.println("editOrderID: " + editOrderID);
+        System.out.println("newDate: " + newDate);
+        System.out.println("editOrderDescription: " + editDescription);
+
+
 
         response.sendRedirect ("OrderEdit.jsp");
     }

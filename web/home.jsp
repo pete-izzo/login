@@ -68,7 +68,7 @@
               </tr>
                 <c:forEach items="${cooldata}" var="item">
                   <tr>
-                      <form action="OrderServlet" method="POST">
+                      <form action="OrderServlet" method="GET">
 
                         <td>${item.orderID}</td>
                   
