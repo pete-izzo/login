@@ -51,8 +51,19 @@ public class OrderServlet extends HttpServlet {
         System.out.println("EditOderIDString: " + editOrderIDString);
 
         if (editOrderIDString != null){
+            // START ORDER EDIT
             int editOrderID = Integer.parseInt(editOrderIDString);
+            String newDate = request.getParameter("editOrderDate");
+            Date editDate = java.sql.Date.valueOf(newDate);
+            String editDescription = request.getParameter("editOrderDescription");
+
+            session.setAttribute("editOrderID", editOrderID);
+            session.setAttribute("newDate", newDate);
+            session.setAttribute("editDescription", editDescription);
+
             System.out.println(editOrderID);
+            System.out.println(editDate);
+            System.out.println(editDescription);
     
         } else {
             System.out.println(editOrderIDString);

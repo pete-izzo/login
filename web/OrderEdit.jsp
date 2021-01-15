@@ -33,37 +33,70 @@
     
         <h1>Welcome <c:out value="${name}" /></h1>
 
+        <!--Only shows if adding a new order-->
         <c:if test="${sessionScope.editOrderIDString == null}">
-          <br>
-          <c:out value="Wow thats a big word. It's over 8 characters long"/>
-        
-        </c:if>
+          <h2>Add an order for...</h2>
+
+          <form action="OrderServlet" method="post">
+              <select name="customerChoice">
+                  <c:forEach items="${customerList}" var="items">
+                      <option value="${items.customerID}">${items.customerName} ${items.customerID}</option>
+                  </c:forEach>
+              </select>
   
-        <h2>Add an order for...</h2>
+              <br>
+              <br>
+              <label for="date">Order Date: </label><br>
+              <input type="date" required name="order_date" id="order_date">
+              <br>
+              <label for="description">Order Description:</label><br>
+              <input type="text" required placeholder="What was ordered?" name="orderDescription" id="orderDescription">
+              <br> 
+  
+              <input type="submit" value="Submit" />
+              <a href="HomeServlet">Back Home</a>
 
-        <form action="OrderServlet" method="post">
-            <select name="customerChoice">
-                <c:forEach items="${customerList}" var="items">
-                    <option value="${items.customerID}">${items.customerName} ${items.customerID}</option>
-                </c:forEach>
-            </select>
-
-            <br>
-            <br>
-            <label for="date">Order Date: </label><br>
-            <input type="date" required name="order_date" id="order_date">
-            <br>
-            <label for="description">Order Description:</label><br>
-            <input type="text" required placeholder="What was ordered?" name="orderDescription" id="orderDescription">
-            <br> 
-       
-      
-
-            <input type="submit" value="Submit" />
-            <a href="HomeServlet">Back Home</a>
+          </form>
+  
+        </c:if>
 
 
-        </form>
+        <c:if test="${sessionScope.editOrderIDString != null}">
+
+            <table>
+              <thead>
+                <tr>
+                  <th colspan="4">Edit Order Info</th>
+                </tr>
+              </thead>
+
+              <tbody>
+
+                <tr>
+                  <th><c:out value="${editOrderID}"/></th>
+                  <th>Customer Name</th>
+                  <th><c:out value="${newDate}"/></th>
+                  <th><c:out value="${editDescription}"/></th>
+                </tr>
+                    <tr>
+                        <form action="#" method="POST">
+
+                          <td></td>
+                          <td></td>
+                          <td><input type="date" name="newOrderDate" id="orderDate" required></td>
+                          <td><input type="text" name="newDescription" id="description" required></td>
+
+                          <td><input type="submit" value="Save"/>
+
+                        </form>
+                        
+                    </tr>
+
+              </tbody>
+            </table>  
+
+        </c:if>
+
 
 
   
