@@ -63,98 +63,101 @@ public class OrderServlet extends HttpServlet {
         Statement stmt = null;
         String addOrder = null;
 
+        try {
+            System.out.println("start try-catch");
 
-        /////////////////////////////////
-        // START ORDER EDIT CODE
-        /////////////////////////////////
-        if (editOrderIDString != null){
-            int editOrderID = Integer.parseInt(editOrderIDString);
-            String newDate = request.getParameter("editOrderDate");
-            Date editDate = java.sql.Date.valueOf(newDate);
-            String custName = request.getParameter("editCustomerName");
-            String editDescription = request.getParameter("editOrderDescription");
+            ctx = new InitialContext();
+            DataSource ds = (DataSource) ctx.lookup("java:comp/env/jdbc/firstDB");
 
-            //
-            session.setAttribute("custName", custName);
-            session.setAttribute("editOrderID", editOrderID);
-            session.setAttribute("newDate", newDate);
-            session.setAttribute("editDescription", editDescription);
+            con = ds.getConnection();
 
-            // String updateOrder = "UPDATE orders" +
-            // " SET order_date = ?" +
-            // ", order_desc = ?" +
-            // " WHERE order_id = ?";
+            stmt = con.createStatement();
 
-            // PreparedStatement editOrder = con.prepareStatement(updateOrder);
-            // editOrder.setDate(1, newOrderDate);
-            // editOrder.setString(2, newDescription);
-            // editOrder.setInt(3, orderIDToEdit);
+            /////////////////////////////////
+            // START ORDER EDIT CODE
+            /////////////////////////////////
+            if (editOrderIDString != null){
+                int editOrderID = Integer.parseInt(editOrderIDString);
+                String newDate = request.getParameter("editOrderDate");
+                Date editDate = java.sql.Date.valueOf(newDate);
+                String custName = request.getParameter("editCustomerName");
+                String editDescription = request.getParameter("editOrderDescription");
 
-            // editOrder.executeUpdate();
-            // editOrder.close();
+                //
+                session.setAttribute("custName", custName);
+                session.setAttribute("editOrderID", editOrderID);
+                session.setAttribute("newDate", newDate);
+                session.setAttribute("editDescription", editDescription);
 
-            // editOrderStatement = con.createStatement();
-            // editOrderStatement.execute(updateOrder);
+                // String updateOrder = "UPDATE orders" +
+                // " SET order_date = ?" +
+                // ", order_desc = ?" +
+                // " WHERE order_id = ?";
+
+                // PreparedStatement editOrder = con.prepareStatement(updateOrder);
+                // editOrder.setDate(1, newOrderDate);
+                // editOrder.setString(2, newDescription);
+                // editOrder.setInt(3, orderIDToEdit);
+
+                // editOrder.executeUpdate();
+                // editOrder.close();
+
+                // editOrderStatement = con.createStatement();
+                // editOrderStatement.execute(updateOrder);
 
 
-            System.out.println(editOrderID);
-            System.out.println(editDate);
-            System.out.println(editDescription);
-    
-        } else {
-            System.out.println(editOrderIDString);
-        }
+                System.out.println(editOrderID);
+                System.out.println(editDate);
+                System.out.println(editDescription);
+        
+            } else {
+                System.out.println(editOrderIDString);
+            }
 
-        /////////////////////////////////////
-        // ADD NEW ORDER
-        /////////////////////////////////////
-        if(customer != null) {
-            int custID = Integer.parseInt(customer);
-            String orderDate = request.getParameter("order_date");
-            Date date = java.sql.Date.valueOf(orderDate);
-            String description = request.getParameter("orderDescription");
+            /////////////////////////////////////
+            // ADD NEW ORDER
+            /////////////////////////////////////
+            if(customer != null) {
+                int custID = Integer.parseInt(customer);
+                String orderDate = request.getParameter("order_date");
+                Date date = java.sql.Date.valueOf(orderDate);
+                String description = request.getParameter("orderDescription");
+
+                                // Add new order to DB
+                    // regular insert stmt
+                    //works but not secure
+        
+                    // addOrder =  "INSERT INTO orders " +
+                    //             "VALUES " +
+                    //             " (DEFAULT, " + custID + ", CURRENT_DATE, '" + description + "')";
+                    // System.out.println(addOrder);
+        
+                    // stmt.execute(addOrder);
+        
+                    /**
+                     *  
+                     * //////////////////
+                     * PREPARED STATEMENT
+                     * to insert new orders into orders
+                     * table
+                     * //////////////////
+                     * 
+                     */
+                    addOrder =  "INSERT INTO orders (cust_id, order_date, order_desc) VALUES (?, ?, ?)";
+                    PreparedStatement insertOrder = con.prepareStatement(addOrder);
+        
+                    insertOrder.setInt(1, custID);
+                    insertOrder.setDate(2, date);
+                    insertOrder.setString(3, description);
+        
+                    insertOrder.executeUpdate();
+                    insertOrder.close();             
+        
+                    // END OF ADDING NEW ORDER
+            }
+
     
 
-            try {
-                System.out.println("start try-catch");
-    
-                ctx = new InitialContext();
-                DataSource ds = (DataSource) ctx.lookup("java:comp/env/jdbc/firstDB");
-    
-                con = ds.getConnection();
-    
-                stmt = con.createStatement();
-                // Add new order to DB
-                // regular insert stmt
-                //works but not secure
-    
-                // addOrder =  "INSERT INTO orders " +
-                //             "VALUES " +
-                //             " (DEFAULT, " + custID + ", CURRENT_DATE, '" + description + "')";
-                // System.out.println(addOrder);
-    
-                // stmt.execute(addOrder);
-    
-                /**
-                 *  
-                 * //////////////////
-                 * PREPARED STATEMENT
-                 * to insert new orders into orders
-                 * table
-                 * //////////////////
-                 * 
-                 */
-                addOrder =  "INSERT INTO orders (cust_id, order_date, order_desc) VALUES (?, ?, ?)";
-                PreparedStatement insertOrder = con.prepareStatement(addOrder);
-    
-                insertOrder.setInt(1, custID);
-                insertOrder.setDate(2, date);
-                insertOrder.setString(3, description);
-    
-                insertOrder.executeUpdate();
-                insertOrder.close();             
-    
-                // END OF ADDING NEW ORDER
     
             } catch (NamingException ex) {
                 ex.printStackTrace();
@@ -174,7 +177,7 @@ public class OrderServlet extends HttpServlet {
             }
     
 
-        }
+        
 
 
         response.sendRedirect ("OrderEdit.jsp");
