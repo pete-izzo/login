@@ -79,7 +79,7 @@
                   <th><c:out value="${editDescription}"/></th>
                 </tr>
                     <tr>
-                        <form action="#" method="POST">
+                        <form action="OrderServlet" method="POST">
 
                           <td></td>
                           <td></td>

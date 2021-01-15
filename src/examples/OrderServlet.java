@@ -44,6 +44,13 @@ public class OrderServlet extends HttpServlet {
         System.out.println("customerChoice: "+ customer);
 
         String newDate = request.getParameter("editOrderDate");
+        String newOrderDate = request.getParameter("newOrderDate");
+
+        int customerOrderID = null;
+
+        customerOrderID = session.getAttribute(editOrderID);
+
+
 
 
 
@@ -77,43 +84,35 @@ public class OrderServlet extends HttpServlet {
             /////////////////////////////////
 
 
-            // if (newDate != null){
-            //     int editOrderID = Integer.parseInt(editOrderIDString);
-            //     String newDate = request.getParameter("editOrderDate");
-            //     Date editDate = java.sql.Date.valueOf(newDate);
-            //     String custName = request.getParameter("editCustomerName");
-            //     String editDescription = request.getParameter("editOrderDescription");
-
-                //
-                // session.setAttribute("custName", custName);
-                // session.setAttribute("editOrderID", editOrderID);
-                // session.setAttribute("newDate", newDate);
-                // session.setAttribute("editDescription", editDescription);
-
-                // String updateOrder = "UPDATE orders" +
-                // " SET order_date = ?" +
-                // ", order_desc = ?" +
-                // " WHERE order_id = ?";
-
-                // PreparedStatement editOrder = con.prepareStatement(updateOrder);
-                // editOrder.setDate(1, newOrderDate);
-                // editOrder.setString(2, newDescription);
-                // editOrder.setInt(3, orderIDToEdit);
-
-                // editOrder.executeUpdate();
-                // editOrder.close();
-
-                // editOrderStatement = con.createStatement();
-                // editOrderStatement.execute(updateOrder);
+            if (newOrderDate != null){
+                Date editOrderDate = java.sql.Date.valueOf(newOrderDate);
+                String editDescription = request.getParameter("editOrderDescription");
 
 
-            //     System.out.println(editOrderID);
-            //     System.out.println(editDate);
-            //     System.out.println(editDescription);
+                String updateOrder = "UPDATE orders" +
+                " SET order_date = ?" +
+                ", order_desc = ?" +
+                " WHERE order_id = ?";
+
+                PreparedStatement editOrder = con.prepareStatement(updateOrder);
+                editOrder.setDate(1, editOrderDate);
+                editOrder.setString(2, editDescription);
+                editOrder.setInt(3, editOrderID);
+
+                editOrder.executeUpdate();
+                editOrder.close();
+
+                stmt = con.createStatement();
+                stmt.execute(updateOrder);
+
+
+                System.out.println(newOrderDate);
+                System.out.println(editOrderDate);
+                System.out.println(editDescription);
 
 
         
-            // } else {
+            }
             //     System.out.println(editOrderIDString);
             // }
 
@@ -183,7 +182,7 @@ public class OrderServlet extends HttpServlet {
         
 
 
-        response.sendRedirect ("OrderEdit.jsp");
+        response.sendRedirect ("HomeServlet");
 
 
     }
@@ -200,11 +199,8 @@ public class OrderServlet extends HttpServlet {
 
         String editOrderIDString = request.getParameter("editOrderID");
         session.setAttribute("editOrderIDString", editOrderIDString);
-        System.out.println("EditOderIDString: " + editOrderIDString);
-
         int editOrderID = Integer.parseInt(editOrderIDString);
         String newDate = request.getParameter("editOrderDate");
-        Date editDate = java.sql.Date.valueOf(newDate);
         String custName = request.getParameter("editCustomerName");
         String editDescription = request.getParameter("editOrderDescription");
 
@@ -213,12 +209,6 @@ public class OrderServlet extends HttpServlet {
         session.setAttribute("editOrderID", editOrderID);
         session.setAttribute("newDate", newDate);
         session.setAttribute("editDescription", editDescription);
-
-        System.out.println("EditOderIDString: " + custName);
-        System.out.println("editOrderID: " + editOrderID);
-        System.out.println("newDate: " + newDate);
-        System.out.println("editOrderDescription: " + editDescription);
-
 
 
         response.sendRedirect ("OrderEdit.jsp");
