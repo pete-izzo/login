@@ -78,6 +78,7 @@
 
                         <td>${item.description}</td>
                         <input type="hidden" name="editOrderID" value="${item.orderID}">
+                        <input type="hidden" name="editCustomerName" value="${item.customerName}">
                         <input type="hidden" name="editOrderDate" value="${item.orderDate}">
                         <input type="hidden" name="editOrderDescription" value="${item.description}">
                         <td><input type="submit" value="Edit"/>

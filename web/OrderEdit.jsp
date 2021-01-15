@@ -74,23 +74,24 @@
 
                 <tr>
                   <th><c:out value="${editOrderID}"/></th>
-                  <th>Customer Name</th>
+                  <th><c:out value="${custName}"/></th>
                   <th><c:out value="${newDate}"/></th>
                   <th><c:out value="${editDescription}"/></th>
                 </tr>
-                    <tr>
-                        <form action="#" method="POST">
 
-                          <td></td>
-                          <td></td>
-                          <td><input type="date" name="newOrderDate" id="orderDate" required></td>
-                          <td><input type="text" name="newDescription" id="description" required></td>
+                <tr>
+                    <form action="OrderServlet" method="POST">
 
-                          <td><input type="submit" value="Save"/>
+                      <td></td>
+                      <td></td>
+                      <td><input type="date" name="newOrderDate" id="orderDate" required></td>
+                      <td><input type="text" name="newDescription" id="description" required></td>
 
-                        </form>
-                        
-                    </tr>
+                      <td><input type="submit" value="Save"/>
+
+                    </form>
+                    
+                </tr>
 
               </tbody>
             </table>  

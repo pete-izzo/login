@@ -35,11 +35,9 @@ import java.util.logging.Logger;
 public class OrderServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-
         PrintWriter out = response.getWriter();
         HttpSession session = request.getSession(false);
 
-        
         String customer = request.getParameter("customerChoice");
         session.setAttribute("customerChoice", customer);
 
@@ -49,25 +47,6 @@ public class OrderServlet extends HttpServlet {
         session.setAttribute("editOrderIDString", editOrderIDString);
 
         System.out.println("EditOderIDString: " + editOrderIDString);
-
-        if (editOrderIDString != null){
-            // START ORDER EDIT
-            int editOrderID = Integer.parseInt(editOrderIDString);
-            String newDate = request.getParameter("editOrderDate");
-            Date editDate = java.sql.Date.valueOf(newDate);
-            String editDescription = request.getParameter("editOrderDescription");
-
-            session.setAttribute("editOrderID", editOrderID);
-            session.setAttribute("newDate", newDate);
-            session.setAttribute("editDescription", editDescription);
-
-            System.out.println(editOrderID);
-            System.out.println(editDate);
-            System.out.println(editDescription);
-    
-        } else {
-            System.out.println(editOrderIDString);
-        }
 
         /**
          * /////////////
@@ -84,6 +63,51 @@ public class OrderServlet extends HttpServlet {
         Statement stmt = null;
         String addOrder = null;
 
+
+        /////////////////////////////////
+        // START ORDER EDIT CODE
+        /////////////////////////////////
+        if (editOrderIDString != null){
+            int editOrderID = Integer.parseInt(editOrderIDString);
+            String newDate = request.getParameter("editOrderDate");
+            Date editDate = java.sql.Date.valueOf(newDate);
+            String custName = request.getParameter("editCustomerName");
+            String editDescription = request.getParameter("editOrderDescription");
+
+            //
+            session.setAttribute("custName", custName);
+            session.setAttribute("editOrderID", editOrderID);
+            session.setAttribute("newDate", newDate);
+            session.setAttribute("editDescription", editDescription);
+
+            // String updateOrder = "UPDATE orders" +
+            // " SET order_date = ?" +
+            // ", order_desc = ?" +
+            // " WHERE order_id = ?";
+
+            // PreparedStatement editOrder = con.prepareStatement(updateOrder);
+            // editOrder.setDate(1, newOrderDate);
+            // editOrder.setString(2, newDescription);
+            // editOrder.setInt(3, orderIDToEdit);
+
+            // editOrder.executeUpdate();
+            // editOrder.close();
+
+            // editOrderStatement = con.createStatement();
+            // editOrderStatement.execute(updateOrder);
+
+
+            System.out.println(editOrderID);
+            System.out.println(editDate);
+            System.out.println(editDescription);
+    
+        } else {
+            System.out.println(editOrderIDString);
+        }
+
+        /////////////////////////////////////
+        // ADD NEW ORDER
+        /////////////////////////////////////
         if(customer != null) {
             int custID = Integer.parseInt(customer);
             String orderDate = request.getParameter("order_date");
@@ -172,8 +196,5 @@ public class OrderServlet extends HttpServlet {
         System.out.println("EditOderIDString: " + editOrderIDString);
 
         response.sendRedirect ("OrderEdit.jsp");
-
-        // //refreshes current page instead of sending elsewhere
-        // response.setHeader("Refresh", "0; URL=/login/home.jsp"); 
     }
 }
