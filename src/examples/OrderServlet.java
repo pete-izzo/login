@@ -39,13 +39,12 @@ public class OrderServlet extends HttpServlet {
         HttpSession session = request.getSession(false);
 
         String customer = request.getParameter("customerChoice");
+        session.setAttribute("customerChoice", customer);
 
         String newDate = request.getParameter("editOrderDate");
         String newOrderDate = request.getParameter("newOrderDate");
 
-        //needed for order updates and making sure
-        //you can add one after one is edited
-        int customerOrderID = (int)session.getAttribute("editOrderID");
+
         String editOrderIDString = (String)session.getAttribute("editOrderIDString");
 
 
@@ -65,6 +64,7 @@ public class OrderServlet extends HttpServlet {
         String addOrder = null;
 
         try {
+
             ctx = new InitialContext();
             DataSource ds = (DataSource) ctx.lookup("java:comp/env/jdbc/firstDB");
 
@@ -80,6 +80,8 @@ public class OrderServlet extends HttpServlet {
             if (newOrderDate != null){
                 Date editOrderDate = java.sql.Date.valueOf(newOrderDate);
                 String editDescription = request.getParameter("editOrderDescription");
+                int customerOrderID = (int)session.getAttribute("editOrderID");
+
 
 
                 String updateOrder = "UPDATE orders" +
@@ -97,6 +99,7 @@ public class OrderServlet extends HttpServlet {
 
                 stmt = con.createStatement();
                 stmt.execute(updateOrder);
+
         
             }
 
@@ -108,17 +111,6 @@ public class OrderServlet extends HttpServlet {
                 String orderDate = request.getParameter("order_date");
                 Date date = java.sql.Date.valueOf(orderDate);
                 String description = request.getParameter("orderDescription");
-
-                                // Add new order to DB
-                    // regular insert stmt
-                    //works but not secure
-        
-                    // addOrder =  "INSERT INTO orders " +
-                    //             "VALUES " +
-                    //             " (DEFAULT, " + custID + ", CURRENT_DATE, '" + description + "')";
-                    // System.out.println(addOrder);
-        
-                    // stmt.execute(addOrder);
         
                     /**
                      *  
@@ -195,9 +187,7 @@ public class OrderServlet extends HttpServlet {
             String newDate = request.getParameter("editOrderDate");
             String custName = request.getParameter("editCustomerName");
             String editDescription = request.getParameter("editOrderDescription");
-            
-            System.out.println(editOrderIDString);
-    
+                
             
             session.setAttribute("custName", custName);
             session.setAttribute("editOrderID", editOrderID);
