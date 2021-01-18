@@ -39,17 +39,14 @@ public class OrderServlet extends HttpServlet {
         HttpSession session = request.getSession(false);
 
         String customer = request.getParameter("customerChoice");
-        session.setAttribute("customerChoice", customer);
-
-        System.out.println("customerChoice: "+ customer);
 
         String newDate = request.getParameter("editOrderDate");
         String newOrderDate = request.getParameter("newOrderDate");
 
+        //needed for order updates and making sure
+        //you can add one after one is edited
         int customerOrderID = (int)session.getAttribute("editOrderID");
-
-
-
+        String editOrderIDString = (String)session.getAttribute("editOrderIDString");
 
 
         /**
@@ -68,8 +65,6 @@ public class OrderServlet extends HttpServlet {
         String addOrder = null;
 
         try {
-            System.out.println("start try-catch");
-
             ctx = new InitialContext();
             DataSource ds = (DataSource) ctx.lookup("java:comp/env/jdbc/firstDB");
 
@@ -102,17 +97,8 @@ public class OrderServlet extends HttpServlet {
 
                 stmt = con.createStatement();
                 stmt.execute(updateOrder);
-
-
-                System.out.println(newOrderDate);
-                System.out.println(editOrderDate);
-                System.out.println(editDescription);
-
-
         
             }
-            //     System.out.println(editOrderIDString);
-            // }
 
             /////////////////////////////////////
             // ADD NEW ORDER
@@ -175,11 +161,16 @@ public class OrderServlet extends HttpServlet {
                     error.printStackTrace();
                 }
             }
+
+            /**
+             * Reset 'editOrderIDString' to null so you can add new 
+             * orders after editing one
+             */
+            editOrderIDString = null;
+            session.setAttribute("editOrderIDString", editOrderIDString);
     
-
-        
-
-
+        //send to HomeServlet so whole db will be
+        //queried and results will show on screen
         response.sendRedirect ("HomeServlet");
 
 
@@ -196,6 +187,7 @@ public class OrderServlet extends HttpServlet {
         HttpSession session = request.getSession(false);
 
         String editOrderIDString = request.getParameter("editOrderID");
+        // only save edit variables if edit button pressed
         if(editOrderIDString != null) {
             session.setAttribute("editOrderIDString", editOrderIDString);
 
