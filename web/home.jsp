@@ -96,33 +96,6 @@
         <br>          
         <a href="OrderServlet"><button>Submit New Order</button></a>
         <br>
-        <!--
-
-        <h2>To edit a previous order please select the corresponding Order ID from the dropdown</h2>
-        <hr>
-        -->
-        <!--Order edits-->
-        <!--
-        <form action="HomeServlet" method="POST">
-
-          <label for="editDropDown">Order ID</label>
-          <select name="editDropDown">
-            <c:forEach items="${cooldata}" var="item">
-              <option value="${item.orderID}">${item.orderID}</option>
-            </c:forEach>
-          </select>
-
-          <br>
-          <label for="newOrderDate">Order Date</label>
-          <input type="date" name="newOrderDate" id="orderDate" required>
-          <br>
-          <label for="newDescription">Order Description</label>
-          <input type="text" name="newDescription" id="description" required>
-          <input type="submit" value="Edit a previous order">
-        
-
-        </form>
-        -->
   
       </body>
 
