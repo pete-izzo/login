@@ -68,7 +68,6 @@
               </tr>
                 <c:forEach items="${cooldata}" var="item">
                   <tr>
-                      <form action="OrderServlet" method="GET">
 
                         <td>${item.orderID}</td>
                   
@@ -77,13 +76,18 @@
                         <td>${item.orderDate}</td>
 
                         <td>${item.description}</td>
-                        <input type="hidden" name="editOrderID" value="${item.orderID}">
-                        <input type="hidden" name="editCustomerName" value="${item.customerName}">
-                        <input type="hidden" name="editOrderDate" value="${item.orderDate}">
-                        <input type="hidden" name="editOrderDescription" value="${item.description}">
-                        <td><input type="submit" value="Edit"/>
 
-                      </form>
+                        <!--EDIT OR DELETE ITEMS-->
+                        <td><a href="<c:url value='OrderServlet'>
+                                <c:param name="orderID" value="${item.orderID}"/>
+                                </c:url>">Edit
+                            </a>
+                        </td>
+                        <td><a href="<c:url value='OrderServlet'>
+                          <c:param name="delOrderID" value="${item.orderID}"/>
+                          </c:url>">Delete
+                      </a>
+
                       
                   </tr>
                 </c:forEach>                

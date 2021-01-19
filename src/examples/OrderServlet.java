@@ -178,6 +178,8 @@ public class OrderServlet extends HttpServlet {
 
         HttpSession session = request.getSession(false);
 
+
+        ///////////STUFF BELOW HERE IS OLD IDK IF USABLE \\\\\\\\\\\\\\\\\\
         String editOrderIDString = request.getParameter("editOrderID");
         // only save edit variables if edit button pressed
         if(editOrderIDString != null) {
@@ -195,6 +197,15 @@ public class OrderServlet extends HttpServlet {
             session.setAttribute("editDescription", editDescription);
     
         };
+
+        String orderIDString = request.getParameter("orderID");
+        session.setAttribute("orderID", orderIDString);
+
+        String delOrderString = request.getParameter("delOrderID");
+        session.setAttribute("delOrderID", delOrderString);
+
+
+
 
 
         response.sendRedirect ("OrderEdit.jsp");

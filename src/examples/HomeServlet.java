@@ -209,6 +209,11 @@ public class HomeServlet extends HttpServlet {
 
                 newOrders.add(orders);
 
+                System.out.println("newOrders contains: " + orders.getOrderID() + 
+                                    " " + orders.getCustomerName() +
+                                    " " + orders.getOrderDate() +
+                                    " " + orders.getDescription());
+
             }
 
             //Print DB info to page to make sure it's connected

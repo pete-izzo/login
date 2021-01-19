@@ -33,6 +33,23 @@
     
         <h1>Welcome <c:out value="${name}" /></h1>
 
+        <!--orderID set in home.jsp saved in servlet from doGet and passed to this page-->
+        <c:if test="${sessionScope.orderID != null}">
+          <h1>THIS WAS THE CHOSEN ID <c:out value="${orderID}"/></h1>
+
+
+        </c:if>
+
+        <!--test if del is clicked-->
+        <c:if test="${sessionScope.delOrderID != null}">
+
+          <h1>DELETE ID <c:out value="${delOrderID}"/>?</h1>
+
+
+        </c:if>
+
+
+
         <!--Only shows if adding a new order-->
         <c:if test="${sessionScope.editOrderIDString == null}">
           <h2>Add an order for...</h2>
