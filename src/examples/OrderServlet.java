@@ -202,7 +202,41 @@ public class OrderServlet extends HttpServlet {
 
         //Edit Link ID
         String orderIDString = request.getParameter("orderID");
-        int orderIDInt = Integer.parseInt(orderIDString);
+        if(orderIDString != null) {
+
+            int orderIDInt = Integer.parseInt(orderIDString);
+
+            //Gets newOrders ArrayList from session to iterate over to get the specific order
+            //for whichever edit is clicked
+            ArrayList<OrderInfo> newOrders = (ArrayList)session.getAttribute("cooldata");
+
+            //Grabs only the "orders" obj inside "newOrders" that has a matching id as the
+            //one of the clicked edit button
+            for(OrderInfo orders : newOrders){
+
+                if(orders.getOrderID() == orderIDInt) {
+                    System.out.println("newOrders contains: " + orders.getOrderID() + 
+                                        " " + orders.getCustomerName() +
+                                        " " + orders.getOrderDate() +
+                                        " " + orders.getDescription());
+
+                        /*
+                        * \\\\\\\\\\\\\\\\\\\
+                        *   save this order to session so you can mess with it
+                        *   or at least save its values to session to display them
+                        *   in the event that more attributes are saved than displayed on the
+                        *   home screen
+                        * \\\\\\\\\\\\\\\\\\\\
+                        */
+
+                        session.setAttribute("orders", orders);
+
+                }
+
+
+            };
+
+        }
         String del = request.getParameter("delOrderID");
 
 
@@ -220,35 +254,6 @@ public class OrderServlet extends HttpServlet {
         // String delOrderString = request.getParameter("delOrderID");
         // session.setAttribute("delOrderID", delOrderString);
 
-        //Gets newOrders ArrayList from session to iterate over to get the specific order
-        //for whichever edit is clicked
-        ArrayList<OrderInfo> newOrders = (ArrayList)session.getAttribute("cooldata");
-
-        //Grabs only the "orders" obj inside "newOrders" that has a matching id as the
-        //one of the clicked edit button
-        for(OrderInfo orders : newOrders){
-
-            if(orders.getOrderID() == orderIDInt) {
-                System.out.println("newOrders contains: " + orders.getOrderID() + 
-                                    " " + orders.getCustomerName() +
-                                    " " + orders.getOrderDate() +
-                                    " " + orders.getDescription());
-
-                    /*
-                    * \\\\\\\\\\\\\\\\\\\
-                    *   save this order to session so you can mess with it
-                    *   or at least save its values to session to display them
-                    *   in the event that more attributes are saved than displayed on the
-                    *   home screen
-                    * \\\\\\\\\\\\\\\\\\\\
-                    */
-
-                    session.setAttribute("orders", orders);
-
-            }
-
-
-        };
 
 
         response.sendRedirect ("OrderEdit.jsp");

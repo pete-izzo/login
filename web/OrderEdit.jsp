@@ -83,7 +83,7 @@
 
 
         <!--Only shows if adding a new order-->
-        <c:if test="${sessionScope.editOrderIDString == null}">
+        <c:if test="${sessionScope.del == null && sessionScope.orderID == null}">
           <h2>Add an order for...</h2>
 
           <form action="OrderServlet" method="post">
