@@ -85,10 +85,12 @@
                           </a>
                         </td>
 
-                        <!--EDIT ITEMS-->
+                        <!--DELETE ITEMS-->
                         <td>
                           <a href="<c:url value='OrderServlet'>
-                          <c:param name="delOrderID" value="${item.orderID}"/>
+                          <c:param name="orderID" value="${item.orderID}"/>
+                          <c:param name="delOrderID" value="1"/>
+
                           </c:url>">Delete
                           </a>
                         </td>

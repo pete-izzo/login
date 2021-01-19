@@ -200,13 +200,25 @@ public class OrderServlet extends HttpServlet {
         };
         /////////////////// END UNUSABLE CODE \\\\\\\\\\\\\\\\\\\\\
 
+        //Edit Link ID
         String orderIDString = request.getParameter("orderID");
         int orderIDInt = Integer.parseInt(orderIDString);
+        String del = request.getParameter("delOrderID");
+
 
         session.setAttribute("orderID", orderIDString);
+        session.setAttribute("del", del);
 
-        String delOrderString = request.getParameter("delOrderID");
-        session.setAttribute("delOrderID", delOrderString);
+
+        // delOrderID not needed, just a repeat of orderID
+        // instead set to a string of true to go between delete and not
+        //Delete Link ID
+        // String delIDString = request.getParameter("delOrderID");
+        // if(delIDString != null){
+        //     int delIDInt = Integer.parseInt(delIDString);
+        // };
+        // String delOrderString = request.getParameter("delOrderID");
+        // session.setAttribute("delOrderID", delOrderString);
 
         //Gets newOrders ArrayList from session to iterate over to get the specific order
         //for whichever edit is clicked
@@ -215,20 +227,26 @@ public class OrderServlet extends HttpServlet {
         //Grabs only the "orders" obj inside "newOrders" that has a matching id as the
         //one of the clicked edit button
         for(OrderInfo orders : newOrders){
-            if(orders.getOrderID() == orderIDInt)
-               System.out.println("newOrders contains: " + orders.getOrderID() + 
+
+            if(orders.getOrderID() == orderIDInt) {
+                System.out.println("newOrders contains: " + orders.getOrderID() + 
                                     " " + orders.getCustomerName() +
                                     " " + orders.getOrderDate() +
                                     " " + orders.getDescription());
-                
-                /*
-                * \\\\\\\\\\\\\\\\\\\
-                *   save this order to session so you can mess with it
-                *   or at least save its values to session to display them
-                *   in the event that more attributes are saved than displayed on the
-                *   home screen
-                * \\\\\\\\\\\\\\\\\\\\
-                */
+
+                    /*
+                    * \\\\\\\\\\\\\\\\\\\
+                    *   save this order to session so you can mess with it
+                    *   or at least save its values to session to display them
+                    *   in the event that more attributes are saved than displayed on the
+                    *   home screen
+                    * \\\\\\\\\\\\\\\\\\\\
+                    */
+
+                    session.setAttribute("orders", orders);
+
+            }
+
 
         };
 

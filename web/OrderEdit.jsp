@@ -34,16 +34,48 @@
         <h1>Welcome <c:out value="${name}" /></h1>
 
         <!--orderID set in home.jsp saved in servlet from doGet and passed to this page-->
-        <c:if test="${sessionScope.orderID != null}">
+        <c:if test="${sessionScope.orderID != null && sessionScope.del != '1'}">
           <h1>THIS WAS THE CHOSEN ID <c:out value="${orderID}"/></h1>
+
+          <table>
+            <thead>
+              <tr>
+                <th colspan="4">Edit Order Info</th>
+              </tr>
+            </thead>
+
+            <tbody>
+
+              <tr>
+                <th><c:out value="${orders.getOrderID()}"/></th>
+                <th><c:out value="${orders.getCustomerName()}"/></th>
+                <th><c:out value="${orders.getOrderDate()}"/></th>
+                <th><c:out value="${orders.getDescription()}"/></th>
+              </tr>
+                  <tr>
+                      <form action="OrderServlet" method="POST">
+
+                        <td></td>
+                        <td></td>
+                        <td><input type="date" name="newOrderDate" id="orderDate" required></td>
+                        <td><input type="text" name="editOrderDescription" value="${item.description}"></td>
+                        <td><input type="submit" value="Save"/></td>
+
+                      </form>
+                      
+                  </tr>
+
+            </tbody>
+          </table>  
+
 
 
         </c:if>
 
         <!--test if del is clicked-->
-        <c:if test="${sessionScope.delOrderID != null}">
+        <c:if test="${sessionScope.del == '1'}">
 
-          <h1>DELETE ID <c:out value="${delOrderID}"/>?</h1>
+          <h1>DELETE ID <c:out value="${del}"/>?</h1>
 
 
         </c:if>
@@ -80,36 +112,6 @@
         <!--ORDER EDIT-->
         <c:if test="${sessionScope.editOrderIDString != null}">
 
-            <table>
-              <thead>
-                <tr>
-                  <th colspan="4">Edit Order Info</th>
-                </tr>
-              </thead>
-
-              <tbody>
-
-                <tr>
-                  <th><c:out value="${editOrderID}"/></th>
-                  <th><c:out value="${custName}"/></th>
-                  <th><c:out value="${newDate}"/></th>
-                  <th><c:out value="${editDescription}"/></th>
-                </tr>
-                    <tr>
-                        <form action="OrderServlet" method="POST">
-
-                          <td></td>
-                          <td></td>
-                          <td><input type="date" name="newOrderDate" id="orderDate" required></td>
-                          <td><input type="text" name="editOrderDescription" value="${item.description}"></td>
-                          <td><input type="submit" value="Save"/></td>
-
-                        </form>
-                        
-                    </tr>
-
-              </tbody>
-            </table>  
 
         </c:if>
 
