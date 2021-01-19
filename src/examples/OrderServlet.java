@@ -46,7 +46,9 @@ public class OrderServlet extends HttpServlet {
         String newOrderDate = request.getParameter("newOrderDate");
 
 
-        String editOrderIDString = (String)session.getAttribute("editOrderIDString");
+        String orderIDString = (String)session.getAttribute("orderID");
+        String del = request.getParameter("delete");
+
 
 
         /**
@@ -81,7 +83,8 @@ public class OrderServlet extends HttpServlet {
             if (newOrderDate != null){
                 Date editOrderDate = java.sql.Date.valueOf(newOrderDate);
                 String editDescription = request.getParameter("editOrderDescription");
-                int customerOrderID = (int)session.getAttribute("editOrderID");
+                int orderIDInt = Integer.parseInt(orderIDString);
+
 
 
 
@@ -93,7 +96,7 @@ public class OrderServlet extends HttpServlet {
                 PreparedStatement editOrder = con.prepareStatement(updateOrder);
                 editOrder.setDate(1, editOrderDate);
                 editOrder.setString(2, editDescription);
-                editOrder.setInt(3, customerOrderID);
+                editOrder.setInt(3, orderIDInt);
 
                 editOrder.executeUpdate();
                 editOrder.close();
@@ -135,6 +138,26 @@ public class OrderServlet extends HttpServlet {
                     // END OF ADDING NEW ORDER
             }
 
+
+            /**
+             * /////////////////
+             * DELETE ORDER
+             * \\\\\\\\\\\\\\\\\
+             */
+            if(del.equals("delete")) {
+                int orderIDInt = Integer.parseInt(orderIDString);
+
+                String deleteOrder = "DELETE FROM orders" +
+                                     " WHERE order_id = ?";
+                PreparedStatement delOrder = con.prepareStatement(deleteOrder);
+
+                delOrder.setInt(1, orderIDInt);
+                delOrder.executeUpdate();
+                delOrder.close();
+            };
+
+            //////// END DELETE ORDER \\\\\\\\\
+
     
 
     
@@ -159,8 +182,8 @@ public class OrderServlet extends HttpServlet {
              * Reset 'editOrderIDString' to null so you can add new 
              * orders after editing one
              */
-            editOrderIDString = null;
-            session.setAttribute("editOrderIDString", editOrderIDString);
+            orderIDString = null;
+            session.setAttribute("orderIDString", orderIDString);
     
         //send to HomeServlet so whole db will be
         //queried and results will show on screen
@@ -181,23 +204,23 @@ public class OrderServlet extends HttpServlet {
 
 
         ///////////STUFF BELOW HERE IS OLD IDK IF USABLE \\\\\\\\\\\\\\\\\\
-        String editOrderIDString = request.getParameter("editOrderID");
-        // only save edit variables if edit button pressed
-        if(editOrderIDString != null) {
-            session.setAttribute("editOrderIDString", editOrderIDString);
+        // String editOrderIDString = request.getParameter("editOrderID");
+        // // only save edit variables if edit button pressed
+        // if(editOrderIDString != null) {
+        //     session.setAttribute("editOrderIDString", editOrderIDString);
 
-            int editOrderID = Integer.parseInt(editOrderIDString);
-            String newDate = request.getParameter("editOrderDate");
-            String custName = request.getParameter("editCustomerName");
-            String editDescription = request.getParameter("editOrderDescription");
+        //     int editOrderID = Integer.parseInt(editOrderIDString);
+        //     String newDate = request.getParameter("editOrderDate");
+        //     String custName = request.getParameter("editCustomerName");
+        //     String editDescription = request.getParameter("editOrderDescription");
                 
             
-            session.setAttribute("custName", custName);
-            session.setAttribute("editOrderID", editOrderID);
-            session.setAttribute("newDate", newDate);
-            session.setAttribute("editDescription", editDescription);
+        //     session.setAttribute("custName", custName);
+        //     session.setAttribute("editOrderID", editOrderID);
+        //     session.setAttribute("newDate", newDate);
+        //     session.setAttribute("editDescription", editDescription);
     
-        };
+        // };
         /////////////////// END UNUSABLE CODE \\\\\\\\\\\\\\\\\\\\\
 
         //Edit Link ID

@@ -35,7 +35,7 @@
 
         <!--orderID set in home.jsp saved in servlet from doGet and passed to this page-->
         <c:if test="${sessionScope.orderID != null && sessionScope.del != '1'}">
-          <h1>THIS WAS THE CHOSEN ID <c:out value="${orderID}"/></h1>
+          <h1>Choose a new date and type a new description to edit the order below</h1>
 
           <table>
             <thead>
@@ -72,17 +72,48 @@
 
         </c:if>
 
-        <!--test if del is clicked-->
+        <!--END EDIT ORDER SECTION-->
+
+        <!--DELETE SECTION-->
         <c:if test="${sessionScope.del == '1'}">
 
-          <h1>DELETE ID <c:out value="${del}"/>?</h1>
+          <h1>Are you sure you would like to delete:</h1>
+          <table>
+            <thead>
+              <tr>
+                <th colspan="4">Order Info</th>
+              </tr>
+            </thead>
+
+            <tbody>
+
+              <tr>
+                <th><c:out value="${orders.getOrderID()}"/></th>
+                <th><c:out value="${orders.getCustomerName()}"/></th>
+                <th><c:out value="${orders.getOrderDate()}"/></th>
+                <th><c:out value="${orders.getDescription()}"/></th>
+              </tr>
+            </tbody>
+          </table>  
+
+          <br>
+          <form action="OrderServlet" method="POST">
+            <td><input type="hidden" name="delete" value="delete"></td>
+
+            <input type="submit" value="Yes"/>
+
+          </form>
+          <a href="HomeServlet">Back Home</a>
+
 
 
         </c:if>
 
+        <!--END DELETE SECTION-->
 
 
-        <!--Only shows if adding a new order-->
+
+        <!--ADD ORDER SECTION-->
         <c:if test="${sessionScope.del == null && sessionScope.orderID == null}">
           <h2>Add an order for...</h2>
 
@@ -108,14 +139,7 @@
           </form>
   
         </c:if>
-
-        <!--ORDER EDIT-->
-        <c:if test="${sessionScope.editOrderIDString != null}">
-
-
-        </c:if>
-
-
+        <!--END ADD ORDER-->
 
   
       </body>
