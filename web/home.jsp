@@ -77,16 +77,21 @@
 
                         <td>${item.description}</td>
 
-                        <!--EDIT OR DELETE ITEMS-->
-                        <td><a href="<c:url value='OrderServlet'>
+                        <!--EDIT ITEMS-->
+                        <td>
+                          <a href="<c:url value='OrderServlet'>
                                 <c:param name="orderID" value="${item.orderID}"/>
                                 </c:url>">Edit
-                            </a>
+                          </a>
                         </td>
-                        <td><a href="<c:url value='OrderServlet'>
+
+                        <!--EDIT ITEMS-->
+                        <td>
+                          <a href="<c:url value='OrderServlet'>
                           <c:param name="delOrderID" value="${item.orderID}"/>
                           </c:url>">Delete
-                      </a>
+                          </a>
+                        </td>
 
                       
                   </tr>

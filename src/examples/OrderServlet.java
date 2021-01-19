@@ -14,6 +14,7 @@ import java.lang.*;
 import static java.lang.System.*;
 import java.lang.Object;
 import java.util.Collections;
+import java.util.ArrayList;
 import static java.util.Comparator.comparing;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -197,15 +198,39 @@ public class OrderServlet extends HttpServlet {
             session.setAttribute("editDescription", editDescription);
     
         };
+        /////////////////// END UNUSABLE CODE \\\\\\\\\\\\\\\\\\\\\
 
         String orderIDString = request.getParameter("orderID");
+        int orderIDInt = Integer.parseInt(orderIDString);
+
         session.setAttribute("orderID", orderIDString);
 
         String delOrderString = request.getParameter("delOrderID");
         session.setAttribute("delOrderID", delOrderString);
 
+        //Gets newOrders ArrayList from session to iterate over to get the specific order
+        //for whichever edit is clicked
+        ArrayList<OrderInfo> newOrders = (ArrayList)session.getAttribute("cooldata");
 
+        //Grabs only the "orders" obj inside "newOrders" that has a matching id as the
+        //one of the clicked edit button
+        for(OrderInfo orders : newOrders){
+            if(orders.getOrderID() == orderIDInt)
+               System.out.println("newOrders contains: " + orders.getOrderID() + 
+                                    " " + orders.getCustomerName() +
+                                    " " + orders.getOrderDate() +
+                                    " " + orders.getDescription());
+                
+                /*
+                * \\\\\\\\\\\\\\\\\\\
+                *   save this order to session so you can mess with it
+                *   or at least save its values to session to display them
+                *   in the event that more attributes are saved than displayed on the
+                *   home screen
+                * \\\\\\\\\\\\\\\\\\\\
+                */
 
+        };
 
 
         response.sendRedirect ("OrderEdit.jsp");
