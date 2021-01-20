@@ -114,7 +114,6 @@ public class OrderServlet extends HttpServlet {
 
             /////////////////////////////////////
             // ADD NEW ORDER
-            //      THIS ISNT WORKING LOOK INTO IT
             /////////////////////////////////////
             if(customer != null) {
                 System.out.println("--------------Inside New Order Function----------------");
@@ -231,27 +230,6 @@ public class OrderServlet extends HttpServlet {
 
         HttpSession session = request.getSession(false);
 
-
-        ///////////STUFF BELOW HERE IS OLD IDK IF USABLE \\\\\\\\\\\\\\\\\\
-        // String editOrderIDString = request.getParameter("editOrderID");
-        // // only save edit variables if edit button pressed
-        // if(editOrderIDString != null) {
-        //     session.setAttribute("editOrderIDString", editOrderIDString);
-
-        //     int editOrderID = Integer.parseInt(editOrderIDString);
-        //     String newDate = request.getParameter("editOrderDate");
-        //     String custName = request.getParameter("editCustomerName");
-        //     String editDescription = request.getParameter("editOrderDescription");
-                
-            
-        //     session.setAttribute("custName", custName);
-        //     session.setAttribute("editOrderID", editOrderID);
-        //     session.setAttribute("newDate", newDate);
-        //     session.setAttribute("editDescription", editDescription);
-    
-        // };
-        /////////////////// END UNUSABLE CODE \\\\\\\\\\\\\\\\\\\\\
-
         //Edit Link ID
         String orderIDString = request.getParameter("orderID");
         if(orderIDString != null) {
@@ -294,19 +272,6 @@ public class OrderServlet extends HttpServlet {
 
         session.setAttribute("orderID", orderIDString);
         session.setAttribute("del", del);
-
-
-        // delOrderID not needed, just a repeat of orderID
-        // instead set to a string of true to go between delete and not
-        //Delete Link ID
-        // String delIDString = request.getParameter("delOrderID");
-        // if(delIDString != null){
-        //     int delIDInt = Integer.parseInt(delIDString);
-        // };
-        // String delOrderString = request.getParameter("delOrderID");
-        // session.setAttribute("delOrderID", delOrderString);
-
-
 
         response.sendRedirect ("OrderEdit.jsp");
     }
