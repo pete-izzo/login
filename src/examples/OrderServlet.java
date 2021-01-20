@@ -36,6 +36,7 @@ import java.util.logging.Logger;
 public class OrderServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
+        System.out.println("-------------START POST------------------");
         PrintWriter out = response.getWriter();
         HttpSession session = request.getSession(false);
 
@@ -47,7 +48,11 @@ public class OrderServlet extends HttpServlet {
 
 
         String orderIDString = (String)session.getAttribute("orderID");
+        System.out.println("orderIDString: " + orderIDString);
         String del = request.getParameter("delete");
+        System.out.println("del:: " + del);
+
+
 
 
 
@@ -109,12 +114,21 @@ public class OrderServlet extends HttpServlet {
 
             /////////////////////////////////////
             // ADD NEW ORDER
+            //      THIS ISNT WORKING LOOK INTO IT
             /////////////////////////////////////
             if(customer != null) {
+                System.out.println("--------------Inside New Order Function----------------");
+
                 int custID = Integer.parseInt(customer);
+                System.out.println("custID: " + custID);
+
                 String orderDate = request.getParameter("order_date");
                 Date date = java.sql.Date.valueOf(orderDate);
+                System.out.println("Date: " + date);
+
                 String description = request.getParameter("orderDescription");
+                System.out.println("Description: " + description);
+
         
                     /**
                      *  
@@ -127,6 +141,8 @@ public class OrderServlet extends HttpServlet {
                      */
                     addOrder =  "INSERT INTO orders (cust_id, order_date, order_desc) VALUES (?, ?, ?)";
                     PreparedStatement insertOrder = con.prepareStatement(addOrder);
+                    System.out.println("insertOrder: " + insertOrder);
+
         
                     insertOrder.setInt(1, custID);
                     insertOrder.setDate(2, date);
@@ -135,6 +151,8 @@ public class OrderServlet extends HttpServlet {
                     insertOrder.executeUpdate();
                     insertOrder.close();             
         
+                    System.out.println("------------Prepared Statement Complete-------------");
+
                     // END OF ADDING NEW ORDER
             }
 
@@ -144,7 +162,9 @@ public class OrderServlet extends HttpServlet {
              * DELETE ORDER
              * \\\\\\\\\\\\\\\\\
              */
-            if(del.equals("delete")) {
+            System.out.println("------------Before Delete Function-------------");
+
+            if(del != null) {
                 int orderIDInt = Integer.parseInt(orderIDString);
 
                 String deleteOrder = "DELETE FROM orders" +
@@ -157,6 +177,8 @@ public class OrderServlet extends HttpServlet {
             };
 
             //////// END DELETE ORDER \\\\\\\\\
+
+            System.out.println("------------End Delete-------------");
 
     
 
@@ -177,14 +199,21 @@ public class OrderServlet extends HttpServlet {
                     error.printStackTrace();
                 }
             }
+            System.out.println("------------End all SQL code-------------");
+
 
             /**
              * Reset 'editOrderIDString' to null so you can add new 
              * orders after editing one
              */
+            System.out.println("Before redirect orderIDString: " + orderIDString);
+
             orderIDString = null;
             session.setAttribute("orderIDString", orderIDString);
+            System.out.println("After reset orderIDString: " + orderIDString);
+
     
+        System.out.println("------------Redirect to HomeServlet-------------");
         //send to HomeServlet so whole db will be
         //queried and results will show on screen
         response.sendRedirect ("HomeServlet");
